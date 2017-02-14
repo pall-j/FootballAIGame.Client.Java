@@ -1,11 +1,15 @@
 package FootballAIGame;
 
+import FootballAIGame.SimulationEntities.GameState;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 
 public class GameClient {
+    
+    public static final int stepInterval = 200; // [ms]
     
     private InetAddress serverAdress;
     private int port;
@@ -76,7 +80,27 @@ public class GameClient {
     }
     
     private void process(Command command) {
-        
+        switch (command.type) {
+            case GET_PARAMETERS:
+                ai.initialize();
+                try {
+                    connection.sendParameters(ai.getParameters());
+                } catch (IOException e) {
+                    System.out.println("Error while sending parameters to the server.");
+                }
+    
+                break;
+            case GET_ACTION:
+                try {
+                    GameState state = GameState.parse(command.data);
+                    connection.send(ai.getAction(state));
+                } catch (IllegalArgumentException ex) {
+                    System.out.println(ex.getMessage());
+                } catch (IOException e) {
+                    System.out.println("Error while sending action to the server.");
+                }
+                break;
+        }
     }
     
     
