@@ -7,22 +7,53 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 
+/**
+ * The main AI game client class.
+ * <p>
+ * Provides methods to start logging in to the game server and listening for the game server commands.
+ */
 public class GameClient {
     
+    /**
+     * The time in milliseconds of one simulation step.
+     */
     public static final int stepInterval = 200; // [ms]
     
-    private InetAddress serverAdress;
+    /**
+     * Gets or sets the connection to the server.
+     */
+    private InetAddress serverAddress;
+    
+    /**
+     * The game server port.
+     */
     private int port;
+    
+    /**
+     * The AI instance that will process the game server commands.
+     */
     private FootballAI ai;
+    
+    /**
+     * The connection to the server.
+     */
     private ServerConnection connection;
     
-    
+    /**
+     * Initializes a new instance of the {@link GameClient} class.
+     * @param serverAddress The game server address.
+     * @param port The game server port.
+     * @param ai The AI.
+     */
     public GameClient(InetAddress serverAddress, int port, FootballAI ai) {
-        this.serverAdress = serverAddress;
+        this.serverAddress = serverAddress;
         this.port = port;
         this.ai = ai;
     }
     
+    /**
+     * Starts this instance. Starts logging in process.
+     */
     public void start() {
         
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -42,7 +73,7 @@ public class GameClient {
                 
                 try {
                     
-                    connection = ServerConnection.connect(serverAdress, port, tokens[0], tokens[1]);
+                    connection = ServerConnection.connect(serverAddress, port, tokens[0], tokens[1]);
                     System.out.println("Connected.");
                     startProcessing();
                     break;
@@ -61,6 +92,9 @@ public class GameClient {
         
     }
     
+    /**
+     * Starts listening for game commands and processing them.
+     */
     private void startProcessing() {
         
         while (true) {
@@ -79,6 +113,10 @@ public class GameClient {
         }
     }
     
+    /**
+     * Processes the specified command. Calls appropriate {@link FootballAI} methods.
+     * @param command
+     */
     private void process(Command command) {
         switch (command.type) {
             case GET_PARAMETERS:
@@ -102,6 +140,5 @@ public class GameClient {
                 break;
         }
     }
-    
     
 }

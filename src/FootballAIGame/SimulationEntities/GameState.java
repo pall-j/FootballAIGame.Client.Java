@@ -5,14 +5,33 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
+/**
+ * Represents the state of the football game.
+ */
 public class GameState {
-   
+    
+    /**
+     * The football players array consisting of 22 players, where first 11
+     * players are from the player's team and the rest 11 players are from the opponent's team.
+     */
     public FootballPlayer[] footballPlayers;
     
+    /**
+     * The football ball.
+     */
     public Ball ball;
     
+    /**
+     * The simulation step number specifying to which simulation step this instance belongs.
+     */
     public int step;
     
+    /**
+     * Parses the specified binary representation of the game state.
+     * @param data The binary representation of the game state.
+     * @return The parsed game state.
+     * @throws IllegalArgumentException Thrown if an error has occurred while parsing the game state.
+     */
     public static GameState parse(byte[] data) throws IllegalArgumentException {
     
         float[] floatData = new float[92];

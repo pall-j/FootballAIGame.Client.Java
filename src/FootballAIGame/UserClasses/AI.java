@@ -8,12 +8,22 @@ import FootballAIGame.SimulationEntities.PlayerAction;
 
 import java.util.Random;
 
+/**
+ * The main AI class where the AI behavior is defined.
+ */
 public class AI implements FootballAI {
     
     private static Random random;
     
+    /**
+     * The value indicating whether the AI football team holds currently the left goal post.
+     */
     private boolean isOnLeft;
     
+    /**
+     * Gets or sets the football players with their parameters set. <p>
+     * Set after GetParameters is called. Used to know players parameters at every {@link #getAction(GameState)} call.
+     */
     private FootballPlayer[] players;
     
     @Override
