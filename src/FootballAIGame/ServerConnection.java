@@ -110,7 +110,7 @@ public class ServerConnection {
      * @throws IOException Thrown if an error has occurred while reading a line.
      */
     private String readLine() throws IOException {
-        List<Byte> bytes = new ArrayList<>();
+        List<Byte> bytes = new ArrayList<Byte>();
 
         while (true) {
             Byte next = (byte)inputStream.read();
