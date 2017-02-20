@@ -6,11 +6,6 @@ import FootballAIGame.GameClient;
 public class FootballPlayer {
     
     /**
-     * The maximum allowed acceleration in meters per second squared of football player.
-     */
-    public static final int maxAcceleration = 3; // [m/s/s]
-    
-    /**
      * The speed parameter of the player. <p>
      * The max value should be 0.4.
      */
@@ -60,19 +55,35 @@ public class FootballPlayer {
     }
     
     /**
-     * Returns the player's current speed in meters per second.
-     * @return The player's current speed in meters per second.
+     * Returns the player's current speed in meters per simulation step.
+     * @return The player's current speed in meters per simulation step.
      */
     public double currentSpeed() {
-        return movement.length()*1000 / GameClient.stepInterval;
+        return movement.length();
     }
     
     /**
-     * Returns the maximum allowed speed of the player in meters per second.
-     * @return The maximum allowed speed of the player in meters per second.
+     * Returns the maximum allowed speed of the player in meters per simulation step.
+     * @return The maximum allowed speed of the player in meters per simulation step.
      */
     public double maxSpeed() {
-        return 5 + speed * 2.5 / 0.4;
+        return (5 + speed * 2.5 / 0.4) * GameClient.stepInterval / 1000;
+    }
+    
+    /**
+     * Returns the maximum allowed kick speed in meters per simulation step of football player.
+     * @return The maximum allowed kick speed in meters per simulation step of football player.
+     */
+    public double maxKickSpeed() {
+        return (15 + kickPower*10) * GameClient.stepInterval / 1000;
+    }
+    
+    /**
+     * Returns the maximum allowed acceleration in meters per simulation step squared of football player.
+     * @return The maximum allowed acceleration in meters per simulation step squared of football player.
+     */
+    public double maxAcceleration() {
+        return 3 * GameClient.stepInterval / 1000;
     }
     
 }

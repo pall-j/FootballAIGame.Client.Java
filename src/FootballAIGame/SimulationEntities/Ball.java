@@ -1,13 +1,9 @@
 package FootballAIGame.SimulationEntities;
 
 import FootballAIGame.CustomDataTypes.Vector;
+import FootballAIGame.GameClient;
 
 public class Ball {
-    
-    /**
-     * The ball's deceleration in meters per second squared.
-     */
-    public static final double ballDecelleration = 1.5; // [m/s/s]
     
     /**
      * The position of the ball.
@@ -20,7 +16,7 @@ public class Ball {
     public Vector movement;
     
     /**
-     * The ball's current speed in meters per second.
+     * The ball's current speed in meters per simulation step.
      */
     public double currentSpeed;
     
@@ -30,6 +26,14 @@ public class Ball {
     public Ball() {
         this.position = new Vector();
         this.movement = new Vector();
+    }
+    
+    /**
+     * Gets the ball's deceleration in meters per simulation step squared.
+     * @return The ball's deceleration in meters per simulation step squared.
+     */
+    public static double ballDecelleration() {
+        return 1.5 * GameClient.stepInterval / 1000;
     }
     
 }

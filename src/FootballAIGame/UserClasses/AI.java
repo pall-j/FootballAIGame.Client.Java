@@ -1,6 +1,6 @@
 package FootballAIGame.UserClasses;
+import FootballAIGame.CustomDataTypes.Vector;
 import FootballAIGame.FootballAI;
-import FootballAIGame.GameClient;
 import FootballAIGame.SimulationEntities.FootballPlayer;
 import FootballAIGame.SimulationEntities.GameAction;
 import FootballAIGame.SimulationEntities.GameState;
@@ -83,11 +83,22 @@ public class AI implements FootballAI {
             }
     
     
-            // kick correction (to maximum allowed)
-            double maxKickLength = (15 + players[i].kickPower * 10) * GameClient.stepInterval / 1000;
-            double currentKickSpeed = playerAction.kick.length();
-            playerAction.kick.x *= maxKickLength / currentKickSpeed;
-            playerAction.kick.y *= maxKickLength / currentKickSpeed;
+            // acceleration correction
+            Vector toNewMovement = Vector.difference(playerAction.movement, player.movement);
+            if (toNewMovement.length() > player.maxAcceleration())
+            {
+                toNewMovement.resize(player.maxAcceleration());
+                playerAction.movement = Vector.sum(player.movement, toNewMovement);
+            }
+    
+            // speed correction
+            if (playerAction.movement.length() > player.maxSpeed())
+                playerAction.movement.resize(player.maxSpeed());
+    
+            // kick correction
+            if (playerAction.kick.length() > player.maxKickSpeed())
+                playerAction.kick.resize(player.maxKickSpeed());
+        
         }
         
         return action;
