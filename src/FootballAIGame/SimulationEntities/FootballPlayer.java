@@ -67,7 +67,7 @@ public class FootballPlayer {
      * @return The maximum allowed speed of the player in meters per simulation step.
      */
     public double maxSpeed() {
-        return (5 + speed * 2.5 / 0.4) * GameClient.stepInterval / 1000;
+        return (5 + speed * 2.5 / 0.4) * GameClient.stepInterval / 1000.0;
     }
     
     /**
@@ -75,7 +75,7 @@ public class FootballPlayer {
      * @return The maximum allowed kick speed in meters per simulation step of football player.
      */
     public double maxKickSpeed() {
-        return (15 + kickPower*10) * GameClient.stepInterval / 1000;
+        return (15 + kickPower*10) * GameClient.stepInterval / 1000.0;
     }
     
     /**
@@ -83,7 +83,7 @@ public class FootballPlayer {
      * @return The maximum allowed acceleration in meters per simulation step squared of football player.
      */
     public double maxAcceleration() {
-        return 3 * GameClient.stepInterval / 1000;
+        return 3 * Math.pow(GameClient.stepInterval / 1000.0, 2);
     }
     
 }

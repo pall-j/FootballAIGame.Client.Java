@@ -93,7 +93,7 @@ public class ServerConnection {
                
                 Command command = new Command();
                 command.type = Command.CommandType.GET_ACTION;
-                command.data = new byte[372];
+                command.data = new byte[373];
                 inputStream.read(command.data, 0, command.data.length);
                 
                 return command;

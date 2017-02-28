@@ -26,6 +26,8 @@ public class GameState {
      */
     public int step;
     
+    public boolean kickOff;
+    
     /**
      * Parses the specified binary representation of the game state.
      * @param data The binary representation of the game state.
@@ -35,15 +37,19 @@ public class GameState {
     public static GameState parse(byte[] data) throws IllegalArgumentException {
         
         float[] floatData = new float[92];
+        GameState state = new GameState();
         int step;
         
-        if (data.length / 4 != floatData.length + 1)
+        if (data.length != floatData.length*4 + 4 + 1)
             throw new IllegalArgumentException("Invalid game state data.");
-        
+    
+        state.kickOff = data[4] == 1;
+    
         ByteBuffer byteBuffer = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
-        step = byteBuffer.asIntBuffer().get(0); // parse step
         
-        data = Arrays.copyOfRange(data, 4, data.length);
+        step = byteBuffer.asIntBuffer().get(0); // parse step
+        data = Arrays.copyOfRange(data, 5, data.length);
+        
         byteBuffer = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
         byteBuffer.asFloatBuffer().get(floatData); // parse vectors
         
@@ -62,7 +68,6 @@ public class GameState {
             players[i].movement = new Vector(floatData[4 + 4 * i + 2], floatData[4 + 4 * i + 2]);
         }
         
-        GameState state = new GameState();
         state.ball = ball;
         state.footballPlayers = players;
         state.step = step;

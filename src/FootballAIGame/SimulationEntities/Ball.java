@@ -33,7 +33,7 @@ public class Ball {
      * @return The ball's deceleration in meters per simulation step squared.
      */
     public static double ballDecelleration() {
-        return 1.5 * GameClient.stepInterval / 1000;
+        return 1.5 * Math.pow(GameClient.stepInterval / 1000.0, 2);
     }
     
 }
