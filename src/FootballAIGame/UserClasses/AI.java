@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public class AI implements FootballAI {
     
-    private static Random random;
+    public static Random random;
     
     /**
      * The value indicating whether the AI football team holds currently the left goal post.
@@ -82,23 +82,16 @@ public class AI implements FootballAI {
                 playerAction.kick.y = (75 / 2f) - player.position.y;
             }
     
-    
             // acceleration correction
             Vector toNewMovement = Vector.difference(playerAction.movement, player.movement);
-            if (toNewMovement.length() > player.maxAcceleration())
-            {
-                toNewMovement.resize(player.maxAcceleration());
-                playerAction.movement = Vector.sum(player.movement, toNewMovement);
-            }
+            toNewMovement.truncate(player.maxAcceleration());
+            playerAction.movement = Vector.sum(player.movement, toNewMovement);
     
             // speed correction
-            if (playerAction.movement.length() > player.maxSpeed())
-                playerAction.movement.resize(player.maxSpeed());
+            playerAction.movement.truncate(player.maxSpeed());
     
-            // kick correction
-            if (playerAction.kick.length() > player.maxKickSpeed())
-                playerAction.kick.resize(player.maxKickSpeed());
-        
+            // kickVector correction
+            playerAction.kick.truncate(player.maxKickSpeed());
         }
         
         return action;
@@ -111,7 +104,7 @@ public class AI implements FootballAI {
         players = new FootballPlayer[11];
         for (int i = 0; i < 11; i++)
         {
-            players[i] = new FootballPlayer();
+            players[i] = new FootballPlayer(i);
             players[i].speed = 0.4f;
             players[i].kickPower = 0.2f;
             players[i].possession = 0.2f;

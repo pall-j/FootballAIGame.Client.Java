@@ -7,7 +7,7 @@ public class GameAction {
     
     /**
      * The player's actions. When this instance is sent to the server, there should be 11
-     * players with their movement and kick vectors set.
+     * players with their movement and kickVector vectors set.
      */
     public PlayerAction[] playerActions;
     

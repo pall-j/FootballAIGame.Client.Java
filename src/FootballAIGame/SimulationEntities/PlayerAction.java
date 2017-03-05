@@ -13,7 +13,7 @@ public class PlayerAction {
     public Vector movement;
     
     /**
-     * The desired kick vector of the player.
+     * The desired kickVector vector of the player.
      */
     public Vector kick;
     

@@ -30,6 +30,23 @@ public class Vector {
         this.y = y;
     }
     
+    public Vector(Vector from, Vector to, double size) {
+        x = to.x - from.x;
+        y = to.y - from.y;
+        resize(size);
+    }
+    
+    public Vector(double x, double y, double size) {
+        this.x = x;
+        this.y = y;
+        resize(size);
+    }
+    
+    public Vector(Vector from, Vector to) {
+        x = to.x - from.x;
+        y = to.y - from.y;
+    }
+    
     /**
      * Returns the vector length.
      * @return The vector length.
@@ -63,6 +80,25 @@ public class Vector {
         return res;
     }
     
+    public Vector multiplied(double scalar) {
+        Vector result = new Vector(x, y);
+        result.multiply(scalar);
+        
+        return result;
+    }
+    
+    public Vector resized(double newSize) {
+        Vector res = normalized();
+        res.multiply(newSize);
+        return res;
+    }
+    
+    public Vector truncated(double maxLength) {
+        Vector res = new Vector(x, y);
+        res.truncate(maxLength);
+        return res;
+    }
+    
     /**
      * Resizes the current instance to the specified new length.
      * @param newSize The new length.
@@ -73,6 +109,16 @@ public class Vector {
         y *= newSize;
     }
     
+    public void truncate(double maxLength)  {
+        if(length() > maxLength)
+            resize(maxLength);
+    }
+    
+    public void multiply(double scalar) {
+        x *= scalar;
+        y *= scalar;
+    }
+    
     /**
      * Returns the distances between the given vectors.
      * @param firstVector The first vector.
@@ -81,6 +127,16 @@ public class Vector {
      */
     public static double distanceBetween(Vector firstVector, Vector secondVector) {
         return Math.sqrt(Math.pow(firstVector.x - secondVector.y, 2) + Math.pow(firstVector.y - secondVector.y, 2));
+    }
+   
+    /**
+     * Returns the squared distances between the given vectors.
+     * @param firstVector The first vector.
+     * @param secondVector The second vector.
+     * @return The distance between the given vectors.
+     */
+    public static double distanceBetweenSquared(Vector firstVector, Vector secondVector) {
+        return Math.pow(firstVector.x - secondVector.y, 2) + Math.pow(firstVector.y - secondVector.y, 2);
     }
     
     /**

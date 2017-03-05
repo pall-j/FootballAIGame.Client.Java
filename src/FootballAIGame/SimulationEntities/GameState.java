@@ -19,7 +19,7 @@ public class GameState {
     /**
      * The football ball.
      */
-    public Ball ball;
+    public FootballBall ball;
     
     /**
      * The simulation step number specifying to which simulation step this instance belongs.
@@ -55,17 +55,17 @@ public class GameState {
         
         FootballPlayer[] players = new FootballPlayer[22];
         for (int i = 0; i < 22; i++) {
-            players[i] = new FootballPlayer();
+            players[i] = new FootballPlayer(i);
         }
         
-        Ball ball = new Ball();
+        FootballBall ball = new FootballBall();
         ball.position = new Vector(floatData[0], floatData[1]);
         ball.movement = new Vector(floatData[2], floatData[3]);
         
         
         for (int i = 0; i < 22; i++) {
             players[i].position = new Vector(floatData[4 + 4 * i], floatData[4 + 4 * i + 1]);
-            players[i].movement = new Vector(floatData[4 + 4 * i + 2], floatData[4 + 4 * i + 2]);
+            players[i].movement = new Vector(floatData[4 + 4 * i + 2], floatData[4 + 4 * i + 3]);
         }
         
         state.ball = ball;

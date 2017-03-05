@@ -3,7 +3,9 @@ package FootballAIGame.SimulationEntities;
 import FootballAIGame.CustomDataTypes.Vector;
 import FootballAIGame.GameClient;
 
-public class FootballPlayer {
+public class FootballPlayer extends MovableEntity {
+    
+    public int id;
     
     /**
      * The speed parameter of the player. <p>
@@ -24,34 +26,23 @@ public class FootballPlayer {
     public float precision;
     
     /**
-     * The kick power parameter of the player.
+     * The kickVector power parameter of the player.
      * The max value should be 0.4.
      */
     public float kickPower;
     
     /**
-     * The position of the player.
+     * The kickVector of the player. <p>
+     * It describes movement vector that ball would get if the kickVector was done with 100% precision.
      */
-    public Vector position;
-    
-    /**
-     * The movement vector of the player.
-     */
-    public Vector movement;
-    
-    /**
-     * The kick vector of the player. <p>
-     * It describes movement vector that ball would get if the kick was done with 100% precision.
-     */
-    public Vector kick;
+    public Vector kickVector;
     
     /**
      * Initializes a new instance of the {@link FootballPlayer} class.
      */
-    public FootballPlayer() {
-        position = new Vector();
-        movement = new Vector();
-        kick = new Vector();
+    public FootballPlayer(int id) {
+        kickVector = new Vector();
+        this.id = id;
     }
     
     /**
@@ -71,11 +62,11 @@ public class FootballPlayer {
     }
     
     /**
-     * Returns the maximum allowed kick speed in meters per simulation step of football player.
-     * @return The maximum allowed kick speed in meters per simulation step of football player.
+     * Returns the maximum allowed kickVector speed in meters per simulation step of football player.
+     * @return The maximum allowed kickVector speed in meters per simulation step of football player.
      */
     public double maxKickSpeed() {
-        return (10 + kickPower*5) * GameClient.stepInterval / 1000.0;
+        return (15 + kickPower*5) * GameClient.stepInterval / 1000.0;
     }
     
     /**
@@ -86,4 +77,56 @@ public class FootballPlayer {
         return 5 * Math.pow(GameClient.stepInterval / 1000.0, 2);
     }
     
+    public boolean canKickBall(FootballBall ball) {
+        return Vector.distanceBetween(position, ball.position) <= FootballBall.minDistanceForKick;
+    }
+    
+    public void kickBall(FootballBall ball, Vector target)
+    {
+        kickBall(ball, target, maxKickSpeed());
+    }
+    
+    public void kickBall(FootballBall ball, Vector target, double kickAcceleration) {
+        if (kickAcceleration > maxKickSpeed())
+            kickAcceleration = maxKickSpeed();
+        kickVector = new Vector(ball.position, target, kickAcceleration);
+    }
+    
+    public Vector passBall(FootballBall ball, FootballPlayer passTarget) {
+        double time = ball.timeToCoverDistance(Vector.distanceBetween(ball.position, passTarget.position), maxKickSpeed());
+        Vector nextPos = passTarget.predictedPositionInTime(time);
+        kickBall(ball, nextPos);
+        return nextPos;
+    }
+    
+    public static double DotProduct(Vector v1, Vector v2)
+    {
+        return v1.x*v2.x + v1.y*v2.y;
+    }
+    
+    public double TimeToGetToTarget(Vector target) {
+        // this is only approx. (continuous acceleration)
+        
+        Vector toTarget = Vector.difference(target, position);
+        if (toTarget.length() < 0.001)
+            return 0;
+        
+        double v0 = Vector.dotProduct(toTarget, movement) / toTarget.length();
+        double v1 = maxSpeed();
+        double a = maxAcceleration();
+        double t1 = (v1 - v0) / a;
+        double s = Vector.distanceBetween(position, target);
+    
+        double s1 = v0*t1 + 1/2.0*a*t1*t1; // distance traveled during acceleration
+        if (s1 >= s) // target reached during acceleration
+        {
+            double discriminant = 4*v0*v0 + 8*a*s;
+            return (-2*v0 + Math.sqrt(discriminant))/(2*a);
+        }
+    
+        double s2 = s - s1; // distance traveled during max speed
+        double t2 = s2/v1;
+        
+        return t1 + t2;
+    }
 }
