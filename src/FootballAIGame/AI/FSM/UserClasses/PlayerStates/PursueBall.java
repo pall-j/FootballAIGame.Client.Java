@@ -1,0 +1,42 @@
+package FootballAIGame.AI.FSM.UserClasses.PlayerStates;
+
+import FootballAIGame.AI.FSM.UserClasses.Ai;
+import FootballAIGame.AI.FSM.UserClasses.Entities.GoalKeeper;
+import FootballAIGame.AI.FSM.UserClasses.Entities.Player;
+import FootballAIGame.AI.FSM.UserClasses.Messaging.MessageDispatcher;
+import FootballAIGame.AI.FSM.UserClasses.Messaging.Messages.PursueBallMessage;
+import FootballAIGame.AI.FSM.UserClasses.SteeringBehaviors.Pursuit;
+
+public class PursueBall extends PlayerState {
+    
+    private Pursuit ballPursuit;
+    
+    public PursueBall(Player player) {
+        super(player);
+    }
+    
+    @Override
+    public void enter() {
+        ballPursuit = new Pursuit(player, 1, 1.0, Ai.getInstance().ball);
+        player.steeringBehaviorsManager.addBehavior(ballPursuit);
+    }
+    
+    @Override
+    public void run() {
+        if (player.canKickBall(Ai.getInstance().ball)) {
+            player.stateMachine.changeState(new KickBall(player));
+            return;
+        }
+        
+        Player nearestToBall = Ai.getInstance().myTeam.getNearestPlayerToBall();
+        if (player != nearestToBall && !(nearestToBall instanceof GoalKeeper)) {
+            player.stateMachine.changeState(new MoveToHomeRegion(player));
+            MessageDispatcher.getInstance().sendMessage(new PursueBallMessage(), nearestToBall);
+        }
+    }
+    
+    @Override
+    public void exit() {
+        player.steeringBehaviorsManager.removeBehavior(ballPursuit);
+    }
+}
