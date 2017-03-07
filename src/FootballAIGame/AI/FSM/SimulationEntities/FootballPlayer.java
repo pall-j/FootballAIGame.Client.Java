@@ -69,7 +69,7 @@ public class FootballPlayer extends MovableEntity {
      * @return The maximum allowed kickVector speed in meters per simulation step of football player.
      */
     public double maxKickSpeed() {
-        return (10 + kickPower * 5) * GameClient.STEP_INTERVAL / 1000.0;
+        return (15 + kickPower * 5) * GameClient.STEP_INTERVAL / 1000.0;
     }
     
     /**

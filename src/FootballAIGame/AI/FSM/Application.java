@@ -17,8 +17,8 @@ public class Application {
         
         try {
             
-            //GameClient client = new GameClient(InetAddress.getByName("gameserver.northeurope.cloudapp.azure.com"), 50030, Ai.getInstance());
-            GameClient client = new GameClient(InetAddress.getLocalHost(), 50030, Ai.getInstance());
+            GameClient client = new GameClient(InetAddress.getByName("gameserver.northeurope.cloudapp.azure.com"), 50030, Ai.getInstance());
+            //GameClient client = new GameClient(InetAddress.getLocalHost(), 50030, Ai.getInstance());
             client.start();
             
         } catch (UnknownHostException e) {

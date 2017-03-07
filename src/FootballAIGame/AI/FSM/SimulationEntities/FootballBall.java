@@ -33,16 +33,23 @@ public class FootballBall extends MovableEntity {
     }
     
     public Vector predictedPositionInTime(double time) {
-        double finalSpeed = currentSpeed() - ballDeceleration() * time;
+    
+        return predictedPositionInTimeAfterKick(time, movement);
+    }
+    
+    public Vector predictedPositionInTimeAfterKick(double time, Vector kick) {
+        double kickSpeed = kick.length();
         
-        if (Math.abs(currentSpeed()) < 0.001)
+        double finalSpeed = kickSpeed - ballDeceleration() * time;
+        
+        if (Math.abs(kickSpeed) < 0.001)
             return position;
         
         if (finalSpeed < 0 || Double.isInfinite(time))
-            time = currentSpeed() / ballDeceleration(); // time to stop
+            time = kickSpeed / ballDeceleration(); // time to stop
         
-        Vector diff = Vector.sum(movement.getMultiplied(time),
-                movement.getResized(-1 / 2.0 * ballDeceleration() * time * time));
+        Vector diff = Vector.sum(kick.getResized(time * kickSpeed),
+                kick.getResized(-1 / 2.0 * ballDeceleration() * time * time));
         
         return Vector.sum(position, diff);
     }

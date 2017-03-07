@@ -33,7 +33,7 @@ public class DefendGoal extends PlayerState {
         if (Ai.getInstance().myTeam.stateMachine.currentState instanceof Defending &&
                 Vector.distanceBetween(Ai.getInstance().ball.position, Ai.getInstance().myTeam.getGoalCenter()) <
                         Parameters.GOALKEEPER_INTERCEPT_RANGE) {
-            player.stateMachine.changeState(new MoveToHomeRegion(player));
+            player.stateMachine.changeState(new InterceptBall(player));
         }
     }
     
