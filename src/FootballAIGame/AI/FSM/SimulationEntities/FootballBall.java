@@ -5,7 +5,7 @@ import FootballAIGame.AI.FSM.GameClient;
 
 public class FootballBall extends MovableEntity {
     
-    public static final double MAX_DISTANCE_FOR_KICK = 1.5; // [m]
+    public static final double MAX_DISTANCE_FOR_KICK = 2; // [m]
     
     /**
      * Gets the ball's deceleration in meters per simulation step squared.
