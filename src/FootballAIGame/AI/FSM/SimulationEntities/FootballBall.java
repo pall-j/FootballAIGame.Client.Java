@@ -38,11 +38,11 @@ public class FootballBall extends MovableEntity {
         if (Math.abs(currentSpeed()) < 0.001)
             return position;
         
-        if (finalSpeed < 0)
+        if (finalSpeed < 0 || Double.isInfinite(time))
             time = currentSpeed() / ballDeceleration(); // time to stop
         
-        Vector diff = Vector.sum(movement.multiplied(time),
-                movement.resized(-1 / 2.0 * ballDeceleration() * time * time));
+        Vector diff = Vector.sum(movement.getMultiplied(time),
+                movement.getResized(-1 / 2.0 * ballDeceleration() * time * time));
         
         return Vector.sum(position, diff);
     }

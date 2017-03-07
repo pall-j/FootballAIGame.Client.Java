@@ -34,7 +34,7 @@ public class Evade extends SteeringBehavior {
             lookAheadTime = distance / (player.currentSpeed() + target.currentSpeed());
         
         Vector predictedPosition = Vector.sum(target.position,
-                target.movement.multiplied(lookAheadTime));
+                target.movement.getMultiplied(lookAheadTime));
         
         fleeFromTarget.from = predictedPosition;
         

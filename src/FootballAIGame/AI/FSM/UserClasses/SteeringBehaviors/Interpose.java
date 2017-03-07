@@ -44,17 +44,17 @@ public class Interpose extends SteeringBehavior {
         double firstToTargetDistance = Vector.dotProduct(firstToPlayer, firstToSecond) / firstToSecond.length();
         
         if (firstToTargetDistance < 0 || firstToTargetDistance > firstToSecond.length()) {
-            arrive.target = Vector.sum(first.position, firstToSecond.multiplied(1 / 2.0)); // go to midpoint
+            arrive.target = Vector.sum(first.position, firstToSecond.getMultiplied(1 / 2.0)); // go to midpoint
             return arrive.calculateAccelerationVector();
         }
         
-        arrive.target = Vector.sum(first.position, firstToSecond.resized(firstToTargetDistance));
+        arrive.target = Vector.sum(first.position, firstToSecond.getResized(firstToTargetDistance));
         
         double playerToTargetDistance = Vector.distanceBetween(arrive.target, player.position);
         
         if (playerToTargetDistance < 0.01 && firstToSecond.length() > preferredDistanceFromSecond) {
             // move player to meet DistanceFromSecond condition
-            arrive.target = Vector.sum(first.position, firstToSecond.resized(firstToSecond.length() - preferredDistanceFromSecond));
+            arrive.target = Vector.sum(first.position, firstToSecond.getResized(firstToSecond.length() - preferredDistanceFromSecond));
         }
         
         

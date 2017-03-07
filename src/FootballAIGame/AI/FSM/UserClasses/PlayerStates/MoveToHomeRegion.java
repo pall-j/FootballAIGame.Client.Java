@@ -5,7 +5,7 @@ import FootballAIGame.AI.FSM.UserClasses.SteeringBehaviors.Arrive;
 
 public class MoveToHomeRegion extends PlayerState {
     
-    private Arrive MoveToHomeRegionArrive;
+    private Arrive moveToHomeRegionArrive;
     
     public MoveToHomeRegion(Player player) {
         super(player);
@@ -13,19 +13,19 @@ public class MoveToHomeRegion extends PlayerState {
     
     @Override
     public void enter() {
-        MoveToHomeRegionArrive = new Arrive(player, 3, 1, player.homeRegion.center);
-        player.steeringBehaviorsManager.addBehavior(MoveToHomeRegionArrive);
+        moveToHomeRegionArrive = new Arrive(player, 3, 1, player.homeRegion.center);
+        player.steeringBehaviorsManager.addBehavior(moveToHomeRegionArrive);
     }
     
     @Override
     public void run() {
-        MoveToHomeRegionArrive.target = player.homeRegion.center;
+        moveToHomeRegionArrive.target = player.homeRegion.center;
         if (player.isAtHomeRegion() && Math.abs(player.currentSpeed()) < 0.00001)
             player.stateMachine.changeState(new Default(player));
     }
     
     @Override
     public void exit() {
-        player.steeringBehaviorsManager.removeBehavior(MoveToHomeRegionArrive);
+        player.steeringBehaviorsManager.removeBehavior(moveToHomeRegionArrive);
     }
 }

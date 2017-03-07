@@ -96,6 +96,10 @@ public class SteeringBehaviorsManager {
             if (accelerationRemaining <= 0)
                 break;
         }
+    
+        Vector nextMovement = Vector.sum(player.movement, acceleration);
+        nextMovement.truncate(player.maxSpeed());
+        acceleration = Vector.difference(nextMovement, player.movement);
         
         return acceleration;
     }

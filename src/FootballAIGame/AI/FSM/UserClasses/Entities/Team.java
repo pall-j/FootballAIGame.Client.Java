@@ -192,7 +192,7 @@ public class Team {
         return isKickSafe(controllingPlayer, target);
     }
     
-    public boolean isKickSafe(Player from, Vector target) {
+    public boolean isKickSafe(FootballPlayer from, Vector target) {
         
         Ball ball = Ai.getInstance().ball;
         
@@ -205,7 +205,7 @@ public class Team {
             Vector toOpponent = Vector.difference(opponent.position, target);
             
             double k = Vector.dotProduct(toBall, toOpponent) / toBall.length();
-            Vector interposeTarget = Vector.sum(target, toBall.resized(k));
+            Vector interposeTarget = Vector.sum(target, toBall.getResized(k));
             double opponentToInterposeDist = Vector.distanceBetween(opponent.position, interposeTarget);
             
             Vector opponentToKickablePosition = new Vector(opponent.position, interposeTarget,
@@ -228,16 +228,16 @@ public class Team {
         return true;
     }
     
-    public boolean isKickPossible(Player player, Vector target, Ball ball) {
+    public boolean isKickPossible(FootballPlayer player, Vector target, FootballBall ball) {
         return !Double.isInfinite(
                 ball.timeToCoverDistance(Vector.distanceBetween(ball.position, target), player.maxKickSpeed()));
     }
     
-    public Vector tryGetShotOnGoal(Player player) {
+    public Vector tryGetShotOnGoal(FootballPlayer player) {
         return tryGetShotOnGoal(player, Ai.getInstance().ball);
     }
     
-    public Vector tryGetShotOnGoal(Player player, Ball ball) {
+    public Vector tryGetShotOnGoal(FootballPlayer player, FootballBall ball) {
         
         for (int i = 0; i < Parameters.NUMBER_OF_GENERATED_SHOT_TARGETS; i++) {
             Vector target =

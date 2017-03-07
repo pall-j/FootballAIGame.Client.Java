@@ -77,30 +77,30 @@ public class Vector {
     }
     
     /**
-     * Returns the normalized vector of the current instance.
+     * Returns the getNormalized vector of the current instance.
      *
-     * @return The normalized vector of the current instance.
+     * @return The getNormalized vector of the current instance.
      */
-    public Vector normalized() {
+    public Vector getNormalized() {
         Vector res = new Vector(x, y);
         res.normalize();
         return res;
     }
     
-    public Vector multiplied(double scalar) {
+    public Vector getMultiplied(double scalar) {
         Vector result = new Vector(x, y);
         result.multiply(scalar);
         
         return result;
     }
     
-    public Vector resized(double newSize) {
-        Vector res = normalized();
+    public Vector getResized(double newSize) {
+        Vector res = getNormalized();
         res.multiply(newSize);
         return res;
     }
     
-    public Vector truncated(double maxLength) {
+    public Vector getTruncated(double maxLength) {
         Vector res = new Vector(x, y);
         res.truncate(maxLength);
         return res;

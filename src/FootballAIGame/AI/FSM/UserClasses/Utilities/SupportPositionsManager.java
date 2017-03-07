@@ -78,17 +78,14 @@ public class SupportPositionsManager {
     
     private boolean isShotOnGoalPossible(Vector position) {
         // we expect the lowest possible max kicking power of the player
+    
+        FootballPlayer artificialPlayer = new FootballPlayer(0);
+        artificialPlayer.position = position;
         
-        Vector target = Ai.getInstance().myTeam.isOnLeft ?
-                new Vector(GameClient.FIELD_WIDTH, GameClient.FIELD_HEIGHT / 2.0) :
-                new Vector(0, GameClient.FIELD_HEIGHT / 2.0);
-        
-        double distance = Vector.distanceBetween(target, position);
-        
-        FootballBall ball = new FootballBall();
-        ball.position = position;
-        
-        return !Double.isInfinite(ball.timeToCoverDistance(distance, new FootballPlayer(0).maxKickSpeed()));
+        FootballBall artificialBall = new FootballBall();
+        artificialBall.position = position;
+    
+        return (Ai.getInstance().myTeam.tryGetShotOnGoal(artificialPlayer, artificialBall) != null);
     }
     
     private double getDistanceFromControllingScore(Vector position) {

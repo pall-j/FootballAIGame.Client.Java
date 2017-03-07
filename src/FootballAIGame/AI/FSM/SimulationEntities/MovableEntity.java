@@ -19,6 +19,6 @@ public class MovableEntity {
     }
     
     public Vector predictedPositionInTime(double time) {
-        return Vector.sum(position, movement.multiplied(time));
+        return Vector.sum(position, movement.getMultiplied(time));
     }
 }

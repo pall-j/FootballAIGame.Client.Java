@@ -74,6 +74,20 @@ public class ReceivePass extends PlayerState {
         }
     }
     
+    @Override
+    public void exit() {
+        player.steeringBehaviorsManager.removeBehavior(steeringBehavior);
+        if (player == Ai.getInstance().myTeam.passReceiver)
+            Ai.getInstance().myTeam.passReceiver = null;
+    }
+    
     private void updatePassTarget() {
+        Ball ball = Ai.getInstance().ball;
+        double time = ball.timeToCoverDistance(Vector.distanceBetween(passTarget, ball.position), ball.currentSpeed());
+        
+        passTarget = ball.predictedPositionInTime(time);
+    
+        if (steeringBehavior instanceof Arrive)
+            ((Arrive)steeringBehavior).target = passTarget;
     }
 }

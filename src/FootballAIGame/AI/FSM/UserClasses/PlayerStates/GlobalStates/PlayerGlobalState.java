@@ -40,11 +40,16 @@ public class PlayerGlobalState extends PlayerState {
         }
         
         if (message instanceof PassToPlayerMessage) {
+            
             Ball ball = Ai.getInstance().ball;
             Player target = ((PassToPlayerMessage) message).receiver;
             
             double time = ball.timeToCoverDistance(Vector.distanceBetween(target.position, ball.position),
                     player.maxKickSpeed());
+            
+            if (Double.isInfinite(time)) // pass not possible
+                return true;
+            
             Vector predictedTargetPosition = target.predictedPositionInTime(time);
             
             if (player.canKickBall(ball)) {

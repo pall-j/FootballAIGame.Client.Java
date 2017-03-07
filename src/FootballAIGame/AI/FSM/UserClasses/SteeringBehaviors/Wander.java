@@ -45,7 +45,7 @@ public class Wander extends SteeringBehavior {
         Vector target = new Vector(wanderTarget.x, wanderTarget.y);
         
         if (player.currentSpeed() > 0.001) {
-            Vector m = player.movement.normalized();
+            Vector m = player.movement.getNormalized();
             
             target.x = wanderTarget.x * m.x - wanderTarget.y * m.y;
             target.y = wanderTarget.x * m.y + wanderTarget.y * m.x;
