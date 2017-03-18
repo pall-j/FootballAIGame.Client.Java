@@ -12,17 +12,17 @@ public class DefendGoal extends PlayerState {
     
     private Interpose interpose;
     
-    public DefendGoal(Player player) {
-        super(player);
+    public DefendGoal(Player player, Ai ai) {
+        super(player, ai);
     }
     
     @Override
     public void enter() {
         Vector goalCenter = new Vector(0, GameClient.FIELD_HEIGHT / 2);
-        if (!Ai.getInstance().myTeam.isOnLeft)
+        if (!ai.myTeam.isOnLeft)
             goalCenter.x = GameClient.FIELD_WIDTH;
         
-        interpose = new Interpose(player, 1, 1.0, Ai.getInstance().ball, goalCenter);
+        interpose = new Interpose(player, 1, 1.0, ai.ball, goalCenter);
         interpose.preferredDistanceFromSecond = Parameters.DEFEND_GOAL_DISTANCE;
         
         player.steeringBehaviorsManager.addBehavior(interpose);
@@ -30,10 +30,10 @@ public class DefendGoal extends PlayerState {
     
     @Override
     public void run() {
-        if (Ai.getInstance().myTeam.stateMachine.currentState instanceof Defending &&
-                Vector.distanceBetween(Ai.getInstance().ball.position, Ai.getInstance().myTeam.getGoalCenter()) <
+        if (ai.myTeam.stateMachine.currentState instanceof Defending &&
+                Vector.distanceBetween(ai.ball.position, ai.myTeam.getGoalCenter()) <
                         Parameters.GOALKEEPER_INTERCEPT_RANGE) {
-            player.stateMachine.changeState(new InterceptBall(player));
+            player.stateMachine.changeState(new InterceptBall(player, ai));
         }
     }
     

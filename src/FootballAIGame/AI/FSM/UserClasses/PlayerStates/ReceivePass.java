@@ -15,46 +15,46 @@ public class ReceivePass extends PlayerState {
     
     private Vector passTarget;
     
-    public ReceivePass(Player player, Vector passTarget) {
-        super(player);
+    public ReceivePass(Player player, Ai ai, Vector passTarget) {
+        super(player, ai);
         this.passTarget = passTarget;
     }
     
     @Override
     public void enter() {
-        Ai.getInstance().myTeam.passReceiver = player;
-        Ai.getInstance().myTeam.controllingPlayer = player;
+        ai.myTeam.passReceiver = player;
+        ai.myTeam.controllingPlayer = player;
         steeringBehavior = new Arrive(player, 1, 1.0, passTarget);
         player.steeringBehaviorsManager.addBehavior(steeringBehavior);
     }
     
     @Override
     public void run() {
-        if (Ai.getInstance().myTeam.passReceiver != player) {
-            player.stateMachine.changeState(new Default(player));
+        if (ai.myTeam.passReceiver != player) {
+            player.stateMachine.changeState(new Default(player, ai));
             return;
         }
         
         // lost control
-        if (Ai.getInstance().opponentTeam.playerInBallRange != null && Ai.getInstance().myTeam.playerInBallRange == null) {
-            player.stateMachine.changeState(new Default(player));
+        if (ai.opponentTeam.playerInBallRange != null && ai.myTeam.playerInBallRange == null) {
+            player.stateMachine.changeState(new Default(player, ai));
             return;
         }
         
-        if (player.canKickBall(Ai.getInstance().ball)) {
-            player.stateMachine.changeState(new KickBall(player));
+        if (player.canKickBall(ai.ball)) {
+            player.stateMachine.changeState(new KickBall(player, ai));
             return;
         }
         
-        if (Vector.distanceBetween(Ai.getInstance().ball.position, player.position) < Parameters.BALL_RECEIVING_RANGE) {
-            player.stateMachine.changeState(new PursueBall(player));
+        if (Vector.distanceBetween(ai.ball.position, player.position) < Parameters.BALL_RECEIVING_RANGE) {
+            player.stateMachine.changeState(new PursueBall(player, ai));
             return;
         }
         
         updatePassTarget();
         
-        Player nearestOpponent = Ai.getInstance().opponentTeam.getNearestPlayerToPosition(player.position);
-        Ball ball = Ai.getInstance().ball;
+        Player nearestOpponent = ai.opponentTeam.getNearestPlayerToPosition(player.position);
+        Ball ball = ai.ball;
         
         double timeToReceive = ball.timeToCoverDistance(Vector.distanceBetween(ball.position, passTarget), ball.currentSpeed());
         
@@ -77,12 +77,12 @@ public class ReceivePass extends PlayerState {
     @Override
     public void exit() {
         player.steeringBehaviorsManager.removeBehavior(steeringBehavior);
-        if (player == Ai.getInstance().myTeam.passReceiver)
-            Ai.getInstance().myTeam.passReceiver = null;
+        if (player == ai.myTeam.passReceiver)
+            ai.myTeam.passReceiver = null;
     }
     
     private void updatePassTarget() {
-        Ball ball = Ai.getInstance().ball;
+        Ball ball = ai.ball;
         double time = ball.timeToCoverDistance(Vector.distanceBetween(passTarget, ball.position), ball.currentSpeed());
         
         passTarget = ball.predictedPositionInTime(time);

@@ -13,8 +13,8 @@ public class Defending extends TeamState {
     
     private List<Interpose> Interposes;
     
-    public Defending(Team team) {
-        super(team);
+    public Defending(Team team, Ai ai) {
+        super(team, ai);
     }
     
     @Override
@@ -50,12 +50,12 @@ public class Defending extends TeamState {
         
         Interposes = new ArrayList<Interpose>();
         
-        Player controllingOpponent = Ai.getInstance().opponentTeam.getNearestPlayerToBall();
+        Player controllingOpponent = ai.opponentTeam.getNearestPlayerToBall();
         
-        Player firstNearestToControlling = Ai.getInstance().opponentTeam.getNearestPlayerToPosition(
+        Player firstNearestToControlling = ai.opponentTeam.getNearestPlayerToPosition(
                 controllingOpponent.position, controllingOpponent);
         
-        Player secondNearestToControlling = Ai.getInstance().opponentTeam.getNearestPlayerToPosition(
+        Player secondNearestToControlling = ai.opponentTeam.getNearestPlayerToPosition(
                 controllingOpponent.position, controllingOpponent, firstNearestToControlling);
         
         Interpose interpose1 = new Interpose(team.forwards.get(0), 2, 0.8, controllingOpponent, firstNearestToControlling);
@@ -71,8 +71,8 @@ public class Defending extends TeamState {
     @Override
     public void run() {
         
-        if (team.playerInBallRange != null && Ai.getInstance().opponentTeam.playerInBallRange == null) {
-            team.stateMachine.changeState(new Attacking(team));
+        if (team.playerInBallRange != null && ai.opponentTeam.playerInBallRange == null) {
+            team.stateMachine.changeState(new Attacking(team, ai));
             return;
         }
         
@@ -87,12 +87,12 @@ public class Defending extends TeamState {
     
     private void updateSteeringBehaviors() {
         
-        Player controllingOpponent = Ai.getInstance().opponentTeam.getNearestPlayerToBall();
+        Player controllingOpponent = ai.opponentTeam.getNearestPlayerToBall();
         
-        Player firstNearestToControlling = Ai.getInstance().opponentTeam.getNearestPlayerToPosition(
+        Player firstNearestToControlling = ai.opponentTeam.getNearestPlayerToPosition(
                 controllingOpponent.position, controllingOpponent);
         
-        Player secondNearestToControlling = Ai.getInstance().opponentTeam.getNearestPlayerToPosition(
+        Player secondNearestToControlling = ai.opponentTeam.getNearestPlayerToPosition(
                 controllingOpponent.position, controllingOpponent, firstNearestToControlling);
         
         Interposes.get(0).first = controllingOpponent;

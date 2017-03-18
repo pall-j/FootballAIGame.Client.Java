@@ -12,21 +12,21 @@ public class FieldPlayerGlobalState extends PlayerState {
     
     private PlayerGlobalState playerGlobalState;
     
-    public FieldPlayerGlobalState(Player player) {
-        super(player);
-        playerGlobalState = new PlayerGlobalState(player);
+    public FieldPlayerGlobalState(Player player, Ai ai) {
+        super(player, ai);
+        playerGlobalState = new PlayerGlobalState(player, ai);
     }
     
     @Override
     public void run() {
         
-        Team team = Ai.getInstance().myTeam;
+        Team team = ai.myTeam;
         
-        if (player.canKickBall(Ai.getInstance().ball)) {
-            player.stateMachine.changeState(new KickBall(player));
+        if (player.canKickBall(ai.ball)) {
+            player.stateMachine.changeState(new KickBall(player, ai));
         } else if (team.getNearestPlayerToBall() == player &&
                 team.passReceiver == null) {
-            player.stateMachine.changeState(new PursueBall(player));
+            player.stateMachine.changeState(new PursueBall(player, ai));
         }
         
         playerGlobalState.run();

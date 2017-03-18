@@ -21,6 +21,8 @@ public class Team {
     
     private boolean initialEnter;
     
+    protected Ai ai;
+    
     public FiniteStateMachine<Team> stateMachine;
     
     public Player[] players;
@@ -77,7 +79,7 @@ public class Team {
     }
     
     public Player getNearestPlayerToBall() {
-        return getNearestPlayerToPosition(Ai.getInstance().ball.position);
+        return getNearestPlayerToPosition(ai.ball.position);
     }
     
     public boolean isNearerToOpponent(Player player, Player otherPlayer) {
@@ -87,33 +89,36 @@ public class Team {
             return player.position.x < otherPlayer.position.x;
     }
     
-    public Team(FootballPlayer[] footballPlayers) {
-        stateMachine = new FiniteStateMachine<Team>(this, new Kickoff(this), new TeamGlobalState(this));
+    public Team(FootballPlayer[] footballPlayers, Ai ai) {
+        
+        this.ai = ai;
+        
+        stateMachine = new FiniteStateMachine<Team>(this, new Kickoff(this, ai), new TeamGlobalState(this, ai));
         initialEnter = true;
         
         players = new Player[11];
         supportingPlayers = new ArrayList<Player>();
         
-        goalKeeper = new GoalKeeper(footballPlayers[0]);
+        goalKeeper = new GoalKeeper(footballPlayers[0], ai);
         players[0] = goalKeeper;
         
         defenders = new ArrayList<Defender>(4);
         for (int i = 1; i <= 4; i++) {
-            Defender defender = new Defender(footballPlayers[i]);
+            Defender defender = new Defender(footballPlayers[i], ai);
             defenders.add(defender);
             players[i] = defender;
         }
         
         midfielders = new ArrayList<Midfielder>(4);
         for (int i = 5; i <= 8; i++) {
-            Midfielder midfielder = new Midfielder(footballPlayers[i]);
+            Midfielder midfielder = new Midfielder(footballPlayers[i], ai);
             midfielders.add(midfielder);
             players[i] = midfielder;
         }
         
         forwards = new ArrayList<Forward>(2);
         for (int i = 9; i <= 10; i++) {
-            Forward forward = new Forward(footballPlayers[i]);
+            Forward forward = new Forward(footballPlayers[i], ai);
             forwards.add(forward);
             players[i] = forward;
         }
@@ -136,7 +141,7 @@ public class Team {
             players[i].position = state.footballPlayers[i + diff].position;
             players[i].kickVector = new Vector(0, 0);
             
-            double distToBall = Vector.distanceBetween(players[i].position, Ai.getInstance().ball.position);
+            double distToBall = Vector.distanceBetween(players[i].position, ai.ball.position);
             
             if (distToBall < Parameters.BALL_RANGE &&
                     (playerInBallRange == null || bestDist > distToBall)) {
@@ -148,7 +153,7 @@ public class Team {
         if (firstTeam && state.kickOff) {
             isOnLeft = goalKeeper.position.x < 55;
             if (!initialEnter)
-                stateMachine.changeState(new Kickoff(this));
+                stateMachine.changeState(new Kickoff(this, ai));
         }
         
     }
@@ -194,14 +199,14 @@ public class Team {
     
     public boolean isKickSafe(FootballPlayer from, Vector target) {
         
-        Ball ball = Ai.getInstance().ball;
+        Ball ball = ai.ball;
         
         if (from == null)
             return false;
         
         Vector toBall = Vector.difference(ball.position, target);
         
-        for (Player opponent : Ai.getInstance().opponentTeam.players) {
+        for (Player opponent : ai.opponentTeam.players) {
             Vector toOpponent = Vector.difference(opponent.position, target);
             
             double k = Vector.dotProduct(toBall, toOpponent) / toBall.length();
@@ -234,7 +239,7 @@ public class Team {
     }
     
     public Vector tryGetShotOnGoal(FootballPlayer player) {
-        return tryGetShotOnGoal(player, Ai.getInstance().ball);
+        return tryGetShotOnGoal(player, ai.ball);
     }
     
     public Vector tryGetShotOnGoal(FootballPlayer player, FootballBall ball) {
@@ -254,7 +259,7 @@ public class Team {
     }
     
     public Player tryGetSafePass(Player player) {
-        return tryGetSafePass(player, Ai.getInstance().ball);
+        return tryGetSafePass(player, ai.ball);
     }
     
     public Player tryGetSafePass(Player player, Ball ball) {

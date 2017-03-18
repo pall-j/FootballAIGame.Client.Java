@@ -12,8 +12,8 @@ public class Default extends PlayerState {
     
     private Wander wander;
     
-    public Default(Player player) {
-        super(player);
+    public Default(Player player, Ai ai) {
+        super(player, ai);
     }
     
     @Override
@@ -26,11 +26,11 @@ public class Default extends PlayerState {
     
     @Override
     public void run() {
-        Player controlling = Ai.getInstance().myTeam.controllingPlayer;
-        Team team = Ai.getInstance().myTeam;
+        Player controlling = ai.myTeam.controllingPlayer;
+        Team team = ai.myTeam;
         
         if (player instanceof GoalKeeper) {
-            player.stateMachine.changeState(new DefendGoal(player));
+            player.stateMachine.changeState(new DefendGoal(player, ai));
             return;
         }
         
@@ -40,7 +40,7 @@ public class Default extends PlayerState {
                 team.passReceiver == null) {
             MessageDispatcher.getInstance().sendMessage(new PassToPlayerMessage(player), controlling);
         } else if (!player.isAtHomeRegion()) {
-            player.stateMachine.changeState(new MoveToHomeRegion(player));
+            player.stateMachine.changeState(new MoveToHomeRegion(player, ai));
         }
     }
     

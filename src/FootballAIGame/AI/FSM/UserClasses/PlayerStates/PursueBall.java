@@ -11,26 +11,26 @@ public class PursueBall extends PlayerState {
     
     private Pursuit ballPursuit;
     
-    public PursueBall(Player player) {
-        super(player);
+    public PursueBall(Player player, Ai ai) {
+        super(player, ai);
     }
     
     @Override
     public void enter() {
-        ballPursuit = new Pursuit(player, 1, 1.0, Ai.getInstance().ball);
+        ballPursuit = new Pursuit(player, 1, 1.0, ai.ball);
         player.steeringBehaviorsManager.addBehavior(ballPursuit);
     }
     
     @Override
     public void run() {
-        if (player.canKickBall(Ai.getInstance().ball)) {
-            player.stateMachine.changeState(new KickBall(player));
+        if (player.canKickBall(ai.ball)) {
+            player.stateMachine.changeState(new KickBall(player, ai));
             return;
         }
         
-        Player nearestToBall = Ai.getInstance().myTeam.getNearestPlayerToBall();
+        Player nearestToBall = ai.myTeam.getNearestPlayerToBall();
         if (player != nearestToBall && !(nearestToBall instanceof GoalKeeper)) {
-            player.stateMachine.changeState(new MoveToHomeRegion(player));
+            player.stateMachine.changeState(new MoveToHomeRegion(player, ai));
             MessageDispatcher.getInstance().sendMessage(new PursueBallMessage(), nearestToBall);
         }
     }

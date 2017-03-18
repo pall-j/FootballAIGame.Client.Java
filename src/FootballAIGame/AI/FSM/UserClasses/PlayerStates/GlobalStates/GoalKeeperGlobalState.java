@@ -16,18 +16,18 @@ public class GoalKeeperGlobalState extends PlayerState {
     
     private PlayerGlobalState playerGlobalState;
     
-    public GoalKeeperGlobalState(Player player) {
-        super(player);
-        playerGlobalState = new PlayerGlobalState(player);
+    public GoalKeeperGlobalState(Player player, Ai ai) {
+        super(player, ai);
+        playerGlobalState = new PlayerGlobalState(player, ai);
     }
     
     @Override
     public void run() {
         
-        if (player.canKickBall(Ai.getInstance().ball)) {
+        if (player.canKickBall(ai.ball)) {
             Player passTargetPlayer;
-            if ((passTargetPlayer = Ai.getInstance().myTeam.tryGetSafePass(player)) != null) {
-                Vector passTarget = player.passBall(Ai.getInstance().ball, passTargetPlayer);
+            if ((passTargetPlayer = ai.myTeam.tryGetSafePass(player)) != null) {
+                Vector passTarget = player.passBall(ai.ball, passTargetPlayer);
                 MessageDispatcher.getInstance().sendMessage(new ReceivePassMessage(passTarget), passTargetPlayer);
             } else {
                 // find a safe direction and kick the ball there
@@ -36,8 +36,8 @@ public class GoalKeeperGlobalState extends PlayerState {
                 
                 for (int y = 10; y < GameClient.FIELD_HEIGHT; y += 5) {
                     Vector target = new Vector(x, y);
-                    if (Ai.getInstance().myTeam.isKickSafe(player, target)) {
-                        player.kickBall(Ai.getInstance().ball, target);
+                    if (ai.myTeam.isKickSafe(player, target)) {
+                        player.kickBall(ai.ball, target);
                         safeDirectionFound = true;
                         break;
                     }
@@ -46,7 +46,7 @@ public class GoalKeeperGlobalState extends PlayerState {
                 if (!safeDirectionFound) {
                     // kick randomly
                     Vector target = new Vector(x, Ai.random.nextInt((int) GameClient.FIELD_HEIGHT - 2) + 1);
-                    player.kickBall(Ai.getInstance().ball, target);
+                    player.kickBall(ai.ball, target);
                 }
             }
         }
@@ -57,11 +57,11 @@ public class GoalKeeperGlobalState extends PlayerState {
     public boolean processMessage(Message message) {
         
         if (message instanceof ReceivePassMessage) {
-            player.stateMachine.changeState(new InterceptBall(player));
+            player.stateMachine.changeState(new InterceptBall(player, ai));
             return true;
         }
         if (message instanceof GoDefaultMessage) {
-            player.stateMachine.changeState(new DefendGoal(player));
+            player.stateMachine.changeState(new DefendGoal(player, ai));
             return true;
         }
         

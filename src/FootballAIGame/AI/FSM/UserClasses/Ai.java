@@ -11,7 +11,7 @@ import FootballAIGame.AI.FSM.UserClasses.Utilities.SupportPositionsManager;
 import java.util.Random;
 
 /**
- * The main Ai class where the Ai behavior is defined.
+ * The main Ai class where the AI behavior is defined.
  */
 public class Ai implements FootballAI {
     
@@ -23,22 +23,13 @@ public class Ai implements FootballAI {
     
     public Team opponentTeam;
     
-    public GameState currentState;
-    
-    private static Ai instance;
-    
-    public static Ai getInstance() {
-        return instance != null ? instance : (instance = new Ai());
-    }
-    
-    private Ai() {
-        
-    }
+    public SupportPositionsManager supportPositionsManager;
     
     @Override
     public void initialize() {
         if (random == null)
             random = new Random();
+        supportPositionsManager = new SupportPositionsManager(this);
     }
     
     @Override
@@ -46,16 +37,15 @@ public class Ai implements FootballAI {
         
         if (gameState.step == 0 || myTeam == null) {
             ball = new Ball(gameState.ball);
-            myTeam = new Team(getParameters());
-            opponentTeam = new Team(getParameters()); // expect opponent to have the same parameters
+            myTeam = new Team(getParameters(), this);
+            opponentTeam = new Team(getParameters(), this); // expect opponent to have the same parameters
         }
         
         // AI entities (wrappers of SimulationEntities) are set accordingly
-        currentState = gameState;
         ball.loadState(gameState);
         opponentTeam.loadState(gameState, false); // must be loaded before my team!
         myTeam.loadState(gameState, true);
-        SupportPositionsManager.getInstance().update();
+        supportPositionsManager.update();
         
         // new action
         GameAction currentAction = new GameAction();
@@ -80,4 +70,5 @@ public class Ai implements FootballAI {
         
         return players;
     }
+    
 }

@@ -13,14 +13,11 @@ import java.util.List;
 
 public class SupportPositionsManager {
     
-    private static SupportPositionsManager instance;
+    private Ai ai;
     
-    public static SupportPositionsManager getInstance() {
-        return instance != null ? instance : (instance = new SupportPositionsManager());
-    }
-    
-    private SupportPositionsManager() {
+    public SupportPositionsManager(Ai ai) {
         createSupportPositions();
+        this.ai = ai;
     }
     
     private List<SupportPosition> leftSupportPositions;
@@ -53,9 +50,9 @@ public class SupportPositionsManager {
         supportPosition.distanceScore = 0;
         supportPosition.passScore = 0;
         
-        Player controlling = Ai.getInstance().myTeam.controllingPlayer;
+        Player controlling = ai.myTeam.controllingPlayer;
         if (controlling != null) {
-            if (Ai.getInstance().myTeam.isPassFromControllingSafe(supportPosition.position)) {
+            if (ai.myTeam.isPassFromControllingSafe(supportPosition.position)) {
                 supportPosition.score += Parameters.PASS_SAFE_FROM_CONTROLLING_PLAYER_WEIGHT;
                 supportPosition.passScore += Parameters.PASS_SAFE_FROM_CONTROLLING_PLAYER_WEIGHT;
             }
@@ -85,11 +82,11 @@ public class SupportPositionsManager {
         FootballBall artificialBall = new FootballBall();
         artificialBall.position = position;
     
-        return (Ai.getInstance().myTeam.tryGetShotOnGoal(artificialPlayer, artificialBall) != null);
+        return (ai.myTeam.tryGetShotOnGoal(artificialPlayer, artificialBall) != null);
     }
     
     private double getDistanceFromControllingScore(Vector position) {
-        double distance = Vector.distanceBetween(position, Ai.getInstance().myTeam.controllingPlayer.position);
+        double distance = Vector.distanceBetween(position, ai.myTeam.controllingPlayer.position);
         
         double diff = Math.abs(distance - Parameters.OPTIMAL_DISTANCE_FROM_CONTROLLING);
         

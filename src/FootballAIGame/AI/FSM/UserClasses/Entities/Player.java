@@ -12,6 +12,8 @@ import FootballAIGame.AI.FSM.UserClasses.SteeringBehaviors.SteeringBehaviorsMana
 
 public abstract class Player extends FootballPlayer {
     
+    protected Ai ai;
+    
     public FiniteStateMachine<Player> stateMachine;
     
     public Region homeRegion;
@@ -33,17 +35,19 @@ public abstract class Player extends FootballPlayer {
     
     public boolean isInDanger() {
         
-        Player nearest = Ai.getInstance().opponentTeam.getNearestPlayerToPosition(position);
+        Player nearest = ai.opponentTeam.getNearestPlayerToPosition(position);
         
         Vector predictedPosition = predictedPositionInTime(1);
-        Player predictedNearest = Ai.getInstance().opponentTeam.getPredictedNearestPlayerToPosition(predictedPosition, 1);
+        Player predictedNearest = ai.opponentTeam.getPredictedNearestPlayerToPosition(predictedPosition, 1);
         
         return Vector.distanceBetween(nearest.position, position) < Parameters.DANGER_RANGE ||
                 Vector.distanceBetween(predictedNearest.position, predictedPosition) < Parameters.DANGER_RANGE;
     }
     
-    protected Player(FootballPlayer player) {
+    protected Player(FootballPlayer player, Ai ai) {
         super(player.id);
+        
+        this.ai = ai;
         
         this.position = player.position;
         this.movement = player.movement;

@@ -127,7 +127,7 @@ public class GameClient {
     /**
      * Processes the specified command. Calls appropriate {@link FootballAI} methods.
      *
-     * @param command
+     * @param command The command to be processed.
      */
     private void process(Command command) {
         switch (command.type) {

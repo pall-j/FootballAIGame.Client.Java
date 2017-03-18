@@ -17,6 +17,7 @@ public class FootballBall extends MovableEntity {
     }
     
     public double timeToCoverDistance(double distance, double kickPower) {
+       
         double v0 = kickPower;
         double a = ballDeceleration();
         double s = distance;

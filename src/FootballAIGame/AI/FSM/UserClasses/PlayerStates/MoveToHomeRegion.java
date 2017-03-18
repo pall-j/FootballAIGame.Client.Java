@@ -1,5 +1,6 @@
 package FootballAIGame.AI.FSM.UserClasses.PlayerStates;
 
+import FootballAIGame.AI.FSM.UserClasses.Ai;
 import FootballAIGame.AI.FSM.UserClasses.Entities.Player;
 import FootballAIGame.AI.FSM.UserClasses.SteeringBehaviors.Arrive;
 
@@ -7,8 +8,8 @@ public class MoveToHomeRegion extends PlayerState {
     
     private Arrive moveToHomeRegionArrive;
     
-    public MoveToHomeRegion(Player player) {
-        super(player);
+    public MoveToHomeRegion(Player player, Ai ai) {
+        super(player, ai);
     }
     
     @Override
@@ -21,7 +22,7 @@ public class MoveToHomeRegion extends PlayerState {
     public void run() {
         moveToHomeRegionArrive.target = player.homeRegion.center;
         if (player.isAtHomeRegion() && Math.abs(player.currentSpeed()) < 0.00001)
-            player.stateMachine.changeState(new Default(player));
+            player.stateMachine.changeState(new Default(player, ai));
     }
     
     @Override

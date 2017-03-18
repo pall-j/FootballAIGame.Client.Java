@@ -11,22 +11,22 @@ public class InterceptBall extends PlayerState {
     
     private Pursuit ballPursuit;
     
-    public InterceptBall(Player player) {
-        super(player);
+    public InterceptBall(Player player, Ai ai) {
+        super(player, ai);
     }
     
     @Override
     public void enter() {
-        ballPursuit = new Pursuit(player, 1, 1.0, Ai.getInstance().ball);
+        ballPursuit = new Pursuit(player, 1, 1.0, ai.ball);
         player.steeringBehaviorsManager.addBehavior(ballPursuit);
     }
     
     @Override
     public void run() {
-        if (Ai.getInstance().myTeam.stateMachine.currentState instanceof Attacking ||
-                Vector.distanceBetween(player.position, Ai.getInstance().myTeam.getGoalCenter()) >
+        if (ai.myTeam.stateMachine.currentState instanceof Attacking ||
+                Vector.distanceBetween(player.position, ai.myTeam.getGoalCenter()) >
                         Parameters.GOALKEEPER_INTERCEPT_RANGE) {
-            player.stateMachine.changeState(new DefendGoal(player));
+            player.stateMachine.changeState(new DefendGoal(player, ai));
         }
     }
     

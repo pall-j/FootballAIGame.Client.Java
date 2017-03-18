@@ -10,54 +10,52 @@ import FootballAIGame.AI.FSM.UserClasses.Messaging.Messages.PassToPlayerMessage;
 import FootballAIGame.AI.FSM.UserClasses.Messaging.Messages.SupportControllingMessage;
 import FootballAIGame.AI.FSM.UserClasses.Parameters;
 import FootballAIGame.AI.FSM.UserClasses.SteeringBehaviors.Arrive;
-import FootballAIGame.AI.FSM.UserClasses.Utilities.SupportPositionsManager;
 
 public class SupportControlling extends PlayerState {
     
     private Arrive arrive;
     
-    public SupportControlling(Player player) {
-        super(player);
+    public SupportControlling(Player player, Ai ai) {
+        super(player, ai);
     }
     
     @Override
     public void enter() {
-        arrive = new Arrive(player, 1, 1.0, SupportPositionsManager.getInstance().getBestSupportPosition());
+        arrive = new Arrive(player, 1, 1.0, ai.supportPositionsManager.getBestSupportPosition());
         player.steeringBehaviorsManager.addBehavior(arrive);
-        Ai.getInstance().myTeam.supportingPlayers.add(player);
+        ai.myTeam.supportingPlayers.add(player);
     }
     
     @Override
     public void run() {
-        arrive.target = SupportPositionsManager.getInstance().getBestSupportPosition();
-        Team team = Ai.getInstance().myTeam;
+        arrive.target = ai.supportPositionsManager.getBestSupportPosition();
+        Team team = ai.myTeam;
         
         // nearest except goalkeeper and controlling
-        Player nearest = Ai.getInstance().myTeam.getNearestPlayerToPosition(arrive.target, team.goalKeeper, team.controllingPlayer);
+        Player nearest = ai.myTeam.getNearestPlayerToPosition(arrive.target, team.goalKeeper, team.controllingPlayer);
         
         // goalkeeper shouldn't go too far from his home region
         if (player instanceof GoalKeeper &&
                 Vector.distanceBetween(arrive.target, player.homeRegion.center) > Parameters.MAX_GOALKEEPER_SUPPORTING_DISTANCE) {
             MessageDispatcher.getInstance().sendMessage(new SupportControllingMessage(), nearest);
-            player.stateMachine.changeState(new Default(player));
+            player.stateMachine.changeState(new Default(player, ai));
             return;
         }
         
         // if shot on goal is possible request pass from controlling
-        Vector shotVector;
-        if ((shotVector = Ai.getInstance().myTeam.tryGetShotOnGoal(player)) != null && team.controllingPlayer != null)
+        if (ai.myTeam.tryGetShotOnGoal(player) != null && team.controllingPlayer != null)
             MessageDispatcher.getInstance().sendMessage(new PassToPlayerMessage(player));
         
         // someone else is nearer the best position (not goalkeeper)
         if (!(player instanceof GoalKeeper) && nearest != player && nearest != team.controllingPlayer) {
             MessageDispatcher.getInstance().sendMessage(new SupportControllingMessage(), nearest);
-            player.stateMachine.changeState(new Default(player));
+            player.stateMachine.changeState(new Default(player, ai));
         }
     }
     
     @Override
     public void exit() {
         player.steeringBehaviorsManager.removeBehavior(arrive);
-        Ai.getInstance().myTeam.supportingPlayers.remove(player);
+        ai.myTeam.supportingPlayers.remove(player);
     }
 }

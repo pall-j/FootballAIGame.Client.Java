@@ -38,7 +38,7 @@ public class SteeringBehaviorsManager {
             list.remove(behavior);
     }
     
-    public <T> void removeAllbehaviorsOfType(Class<T> typeClass) {
+    public <T> void removeAllBehaviorsOfType(Class<T> typeClass) {
         for (Map.Entry<Integer, List<SteeringBehavior>> entry : steeringBehaviors.entrySet()) {
             
             List<SteeringBehavior> list = entry.getValue();
@@ -54,7 +54,7 @@ public class SteeringBehaviorsManager {
         }
     }
     
-    public <T> List<SteeringBehavior> getAllbehaviorsOfType(Class<T> typeClass) {
+    public <T> List<SteeringBehavior> getAllBehaviorsOfType(Class<T> typeClass) {
         List<SteeringBehavior> result = new LinkedList<SteeringBehavior>();
         
         for (Map.Entry<Integer, List<SteeringBehavior>> entry : steeringBehaviors.entrySet()) {
@@ -71,6 +71,7 @@ public class SteeringBehaviorsManager {
     }
     
     public Vector calculateAccelerationVector() {
+        
         // Weighted Prioritized Truncated Sum method used
         
         Vector acceleration = new Vector(0, 0);
@@ -80,14 +81,14 @@ public class SteeringBehaviorsManager {
             List<SteeringBehavior> list = keyValuePair.getValue();
             
             for (SteeringBehavior steeringbehavior : list) {
-                Vector behaviorAccel = steeringbehavior.calculateAccelerationVector();
-                behaviorAccel.multiply(steeringbehavior.weight);
+                Vector behaviorAcceleration = steeringbehavior.calculateAccelerationVector();
+                behaviorAcceleration.multiply(steeringbehavior.weight);
                 
-                if (accelerationRemaining - behaviorAccel.length() < 0)
-                    behaviorAccel.resize(accelerationRemaining);
-                accelerationRemaining -= behaviorAccel.length();
+                if (accelerationRemaining - behaviorAcceleration.length() < 0)
+                    behaviorAcceleration.resize(accelerationRemaining);
+                accelerationRemaining -= behaviorAcceleration.length();
                 
-                acceleration = Vector.sum(acceleration, behaviorAccel);
+                acceleration = Vector.sum(acceleration, behaviorAcceleration);
                 
                 if (accelerationRemaining <= 0)
                     break;

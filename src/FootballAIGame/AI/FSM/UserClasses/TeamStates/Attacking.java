@@ -7,12 +7,11 @@ import FootballAIGame.AI.FSM.UserClasses.Entities.Player;
 import FootballAIGame.AI.FSM.UserClasses.Entities.Team;
 import FootballAIGame.AI.FSM.UserClasses.Messaging.MessageDispatcher;
 import FootballAIGame.AI.FSM.UserClasses.Messaging.Messages.SupportControllingMessage;
-import FootballAIGame.AI.FSM.UserClasses.Utilities.SupportPositionsManager;
 
 public class Attacking extends TeamState {
     
-    public Attacking(Team team) {
-        super(team);
+    public Attacking(Team team, Ai ai) {
+        super(team, ai);
     }
     
     @Override
@@ -51,12 +50,12 @@ public class Attacking extends TeamState {
     @Override
     public void run() {
         if (team.playerInBallRange == null &&
-                Ai.getInstance().opponentTeam.playerInBallRange != null) {
-            team.stateMachine.changeState(new Defending(team));
+                ai.opponentTeam.playerInBallRange != null) {
+            team.stateMachine.changeState(new Defending(team, ai));
         }
         
         if (team.supportingPlayers.size() == 0 && team.controllingPlayer != null) {
-            Vector bestPos = SupportPositionsManager.getInstance().getBestSupportPosition();
+            Vector bestPos = ai.supportPositionsManager.getBestSupportPosition();
             Player bestSupporter = team.getNearestPlayerToPosition(bestPos, team.controllingPlayer);
             MessageDispatcher.getInstance().sendMessage(new SupportControllingMessage(), bestSupporter);
         }
