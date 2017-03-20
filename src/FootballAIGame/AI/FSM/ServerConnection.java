@@ -37,7 +37,7 @@ public class ServerConnection {
      * @param address  The game server IP address.
      * @param port     The game server port.
      * @param userName Name of the user.
-     * @param aiName   Desired name of the FsmAI.
+     * @param aiName   Desired name of the AI.
      * @return The server connection.
      * @throws IOException Thrown if an error has occurred while connecting to the server.
      */

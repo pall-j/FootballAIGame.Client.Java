@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 
 /**
- * The main FsmAI game client class.
+ * The main AI game client class.
  * <p>
  * Provides methods to start logging in to the game server and listening for the game server commands.
  */
@@ -40,7 +40,7 @@ public class GameClient {
     private int port;
     
     /**
-     * The FsmAI instance that will process the game server commands.
+     * The AI instance that will process the game server commands.
      */
     private FootballAI ai;
     
@@ -54,7 +54,7 @@ public class GameClient {
      *
      * @param serverAddress The game server address.
      * @param port          The game server port.
-     * @param ai            The FsmAI.
+     * @param ai            The AI.
      */
     public GameClient(InetAddress serverAddress, int port, FootballAI ai) {
         this.serverAddress = serverAddress;
@@ -73,7 +73,7 @@ public class GameClient {
             
             while (true) {
                 
-                System.out.println("Enter user name and FsmAI name separated by whitespace.");
+                System.out.println("Enter user name and AI name separated by whitespace.");
                 String line = reader.readLine();
                 String[] tokens = line.split(" ");
                 
