@@ -1,12 +1,12 @@
 package FootballAIGame.AI.FSM.UserClasses.TeamStates;
 
-import FootballAIGame.AI.FSM.UserClasses.Ai;
+import FootballAIGame.AI.FSM.UserClasses.FsmAI;
 import FootballAIGame.AI.FSM.UserClasses.Entities.Team;
 
 public class TeamGlobalState extends TeamState {
     
-    public TeamGlobalState(Team team, Ai ai) {
-        super(team, ai);
+    public TeamGlobalState(Team team, FsmAI fsmAI) {
+        super(team, fsmAI);
     }
     
     @Override

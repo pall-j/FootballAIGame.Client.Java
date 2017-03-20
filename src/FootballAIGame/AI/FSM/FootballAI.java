@@ -7,7 +7,7 @@ import FootballAIGame.AI.FSM.SimulationEntities.GameAction;
 public interface FootballAI {
     
     /**
-     * Called every time the new match simulation with the Ai starts.
+     * Called every time the new match simulation with the FsmAI starts.
      * <p>
      * Called before {@link #getParameters()}.
      */

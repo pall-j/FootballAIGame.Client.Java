@@ -1,6 +1,6 @@
 package FootballAIGame.AI.FSM;
 
-import FootballAIGame.AI.FSM.UserClasses.Ai;
+import FootballAIGame.AI.FSM.UserClasses.FsmAI;
 
 import java.net.*;
 
@@ -17,8 +17,8 @@ public class Application {
         
         try {
             
-            GameClient client = new GameClient(InetAddress.getByName("gameserver.northeurope.cloudapp.azure.com"), 50030, new Ai());
-            //GameClient client = new GameClient(InetAddress.getLocalHost(), 50030, new Ai());
+            GameClient client = new GameClient(InetAddress.getByName("gameserver.northeurope.cloudapp.azure.com"), 50030, new FsmAI());
+            //GameClient client = new GameClient(InetAddress.getLocalHost(), 50030, new FsmAI());
             client.start();
             
         } catch (UnknownHostException e) {

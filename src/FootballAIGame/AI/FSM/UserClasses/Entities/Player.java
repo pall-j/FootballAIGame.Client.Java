@@ -4,7 +4,7 @@ import FootballAIGame.AI.FSM.CustomDataTypes.Region;
 import FootballAIGame.AI.FSM.CustomDataTypes.Vector;
 import FootballAIGame.AI.FSM.SimulationEntities.FootballPlayer;
 import FootballAIGame.AI.FSM.SimulationEntities.PlayerAction;
-import FootballAIGame.AI.FSM.UserClasses.Ai;
+import FootballAIGame.AI.FSM.UserClasses.FsmAI;
 import FootballAIGame.AI.FSM.UserClasses.FiniteStateMachine;
 import FootballAIGame.AI.FSM.UserClasses.Messaging.Message;
 import FootballAIGame.AI.FSM.UserClasses.Parameters;
@@ -12,7 +12,7 @@ import FootballAIGame.AI.FSM.UserClasses.SteeringBehaviors.SteeringBehaviorsMana
 
 public abstract class Player extends FootballPlayer {
     
-    protected Ai ai;
+    protected FsmAI fsmAI;
     
     public FiniteStateMachine<Player> stateMachine;
     
@@ -35,19 +35,19 @@ public abstract class Player extends FootballPlayer {
     
     public boolean isInDanger() {
         
-        Player nearest = ai.opponentTeam.getNearestPlayerToPosition(position);
+        Player nearest = fsmAI.opponentTeam.getNearestPlayerToPosition(position);
         
         Vector predictedPosition = predictedPositionInTime(1);
-        Player predictedNearest = ai.opponentTeam.getPredictedNearestPlayerToPosition(predictedPosition, 1);
+        Player predictedNearest = fsmAI.opponentTeam.getPredictedNearestPlayerToPosition(predictedPosition, 1);
         
         return Vector.distanceBetween(nearest.position, position) < Parameters.DANGER_RANGE ||
                 Vector.distanceBetween(predictedNearest.position, predictedPosition) < Parameters.DANGER_RANGE;
     }
     
-    protected Player(FootballPlayer player, Ai ai) {
+    protected Player(FootballPlayer player, FsmAI fsmAI) {
         super(player.id);
         
-        this.ai = ai;
+        this.fsmAI = fsmAI;
         
         this.position = player.position;
         this.movement = player.movement;

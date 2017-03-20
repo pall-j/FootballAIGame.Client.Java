@@ -1,7 +1,7 @@
 package FootballAIGame.AI.FSM.UserClasses.Entities;
 
 import FootballAIGame.AI.FSM.SimulationEntities.FootballPlayer;
-import FootballAIGame.AI.FSM.UserClasses.Ai;
+import FootballAIGame.AI.FSM.UserClasses.FsmAI;
 import FootballAIGame.AI.FSM.UserClasses.FiniteStateMachine;
 import FootballAIGame.AI.FSM.UserClasses.Messaging.Message;
 import FootballAIGame.AI.FSM.UserClasses.PlayerStates.Default;
@@ -9,11 +9,11 @@ import FootballAIGame.AI.FSM.UserClasses.PlayerStates.GlobalStates.GoalKeeperGlo
 
 public class GoalKeeper extends Player {
     
-    public GoalKeeper(FootballPlayer player, Ai ai) {
-        super(player, ai);
+    public GoalKeeper(FootballPlayer player, FsmAI fsmAI) {
+        super(player, fsmAI);
         
-        stateMachine = new FiniteStateMachine<Player>(this, new Default(this, ai),
-                new GoalKeeperGlobalState(this, ai));
+        stateMachine = new FiniteStateMachine<Player>(this, new Default(this, fsmAI),
+                new GoalKeeperGlobalState(this, fsmAI));
     }
     
     @Override

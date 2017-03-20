@@ -4,7 +4,7 @@ import FootballAIGame.AI.FSM.CustomDataTypes.Vector;
 import FootballAIGame.AI.FSM.GameClient;
 import FootballAIGame.AI.FSM.SimulationEntities.FootballBall;
 import FootballAIGame.AI.FSM.SimulationEntities.FootballPlayer;
-import FootballAIGame.AI.FSM.UserClasses.Ai;
+import FootballAIGame.AI.FSM.UserClasses.FsmAI;
 import FootballAIGame.AI.FSM.UserClasses.Entities.Player;
 import FootballAIGame.AI.FSM.UserClasses.Parameters;
 
@@ -13,11 +13,11 @@ import java.util.List;
 
 public class SupportPositionsManager {
     
-    private Ai ai;
+    private FsmAI fsmAI;
     
-    public SupportPositionsManager(Ai ai) {
+    public SupportPositionsManager(FsmAI fsmAI) {
         createSupportPositions();
-        this.ai = ai;
+        this.fsmAI = fsmAI;
     }
     
     private List<SupportPosition> leftSupportPositions;
@@ -50,9 +50,9 @@ public class SupportPositionsManager {
         supportPosition.distanceScore = 0;
         supportPosition.passScore = 0;
         
-        Player controlling = ai.myTeam.controllingPlayer;
+        Player controlling = fsmAI.myTeam.controllingPlayer;
         if (controlling != null) {
-            if (ai.myTeam.isPassFromControllingSafe(supportPosition.position)) {
+            if (fsmAI.myTeam.isPassFromControllingSafe(supportPosition.position)) {
                 supportPosition.score += Parameters.PASS_SAFE_FROM_CONTROLLING_PLAYER_WEIGHT;
                 supportPosition.passScore += Parameters.PASS_SAFE_FROM_CONTROLLING_PLAYER_WEIGHT;
             }
@@ -82,11 +82,11 @@ public class SupportPositionsManager {
         FootballBall artificialBall = new FootballBall();
         artificialBall.position = position;
     
-        return (ai.myTeam.tryGetShotOnGoal(artificialPlayer, artificialBall) != null);
+        return (fsmAI.myTeam.tryGetShotOnGoal(artificialPlayer, artificialBall) != null);
     }
     
     private double getDistanceFromControllingScore(Vector position) {
-        double distance = Vector.distanceBetween(position, ai.myTeam.controllingPlayer.position);
+        double distance = Vector.distanceBetween(position, fsmAI.myTeam.controllingPlayer.position);
         
         double diff = Math.abs(distance - Parameters.OPTIMAL_DISTANCE_FROM_CONTROLLING);
         

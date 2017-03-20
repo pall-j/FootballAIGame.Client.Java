@@ -1,7 +1,7 @@
 package FootballAIGame.AI.FSM.UserClasses.TeamStates;
 
 import FootballAIGame.AI.FSM.CustomDataTypes.Region;
-import FootballAIGame.AI.FSM.UserClasses.Ai;
+import FootballAIGame.AI.FSM.UserClasses.FsmAI;
 import FootballAIGame.AI.FSM.UserClasses.Entities.Player;
 import FootballAIGame.AI.FSM.UserClasses.Entities.Team;
 import FootballAIGame.AI.FSM.UserClasses.SteeringBehaviors.Interpose;
@@ -13,8 +13,8 @@ public class Defending extends TeamState {
     
     private List<Interpose> Interposes;
     
-    public Defending(Team team, Ai ai) {
-        super(team, ai);
+    public Defending(Team team, FsmAI fsmAI) {
+        super(team, fsmAI);
     }
     
     @Override
@@ -50,12 +50,12 @@ public class Defending extends TeamState {
         
         Interposes = new ArrayList<Interpose>();
         
-        Player controllingOpponent = ai.opponentTeam.getNearestPlayerToBall();
+        Player controllingOpponent = fsmAI.opponentTeam.getNearestPlayerToBall();
         
-        Player firstNearestToControlling = ai.opponentTeam.getNearestPlayerToPosition(
+        Player firstNearestToControlling = fsmAI.opponentTeam.getNearestPlayerToPosition(
                 controllingOpponent.position, controllingOpponent);
         
-        Player secondNearestToControlling = ai.opponentTeam.getNearestPlayerToPosition(
+        Player secondNearestToControlling = fsmAI.opponentTeam.getNearestPlayerToPosition(
                 controllingOpponent.position, controllingOpponent, firstNearestToControlling);
         
         Interpose interpose1 = new Interpose(team.forwards.get(0), 2, 0.8, controllingOpponent, firstNearestToControlling);
@@ -71,8 +71,8 @@ public class Defending extends TeamState {
     @Override
     public void run() {
         
-        if (team.playerInBallRange != null && ai.opponentTeam.playerInBallRange == null) {
-            team.stateMachine.changeState(new Attacking(team, ai));
+        if (team.playerInBallRange != null && fsmAI.opponentTeam.playerInBallRange == null) {
+            team.stateMachine.changeState(new Attacking(team, fsmAI));
             return;
         }
         
@@ -87,12 +87,12 @@ public class Defending extends TeamState {
     
     private void updateSteeringBehaviors() {
         
-        Player controllingOpponent = ai.opponentTeam.getNearestPlayerToBall();
+        Player controllingOpponent = fsmAI.opponentTeam.getNearestPlayerToBall();
         
-        Player firstNearestToControlling = ai.opponentTeam.getNearestPlayerToPosition(
+        Player firstNearestToControlling = fsmAI.opponentTeam.getNearestPlayerToPosition(
                 controllingOpponent.position, controllingOpponent);
         
-        Player secondNearestToControlling = ai.opponentTeam.getNearestPlayerToPosition(
+        Player secondNearestToControlling = fsmAI.opponentTeam.getNearestPlayerToPosition(
                 controllingOpponent.position, controllingOpponent, firstNearestToControlling);
         
         Interposes.get(0).first = controllingOpponent;

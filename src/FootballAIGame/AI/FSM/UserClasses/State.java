@@ -4,13 +4,13 @@ import FootballAIGame.AI.FSM.UserClasses.Messaging.Message;
 
 public abstract class State<TEntity> {
     
-    protected Ai ai;
+    protected FsmAI fsmAI;
     
     protected TEntity entity;
     
-    public State(TEntity entity, Ai ai) {
+    public State(TEntity entity, FsmAI fsmAI) {
         this.entity = entity;
-        this.ai = ai;
+        this.fsmAI = fsmAI;
     }
     
     public void enter() {

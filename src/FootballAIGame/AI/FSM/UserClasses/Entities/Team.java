@@ -6,7 +6,7 @@ import FootballAIGame.AI.FSM.SimulationEntities.FootballBall;
 import FootballAIGame.AI.FSM.SimulationEntities.FootballPlayer;
 import FootballAIGame.AI.FSM.SimulationEntities.GameState;
 import FootballAIGame.AI.FSM.SimulationEntities.PlayerAction;
-import FootballAIGame.AI.FSM.UserClasses.Ai;
+import FootballAIGame.AI.FSM.UserClasses.FsmAI;
 import FootballAIGame.AI.FSM.UserClasses.FiniteStateMachine;
 import FootballAIGame.AI.FSM.UserClasses.Messaging.Message;
 import FootballAIGame.AI.FSM.UserClasses.Parameters;
@@ -21,7 +21,7 @@ public class Team {
     
     private boolean initialEnter;
     
-    protected Ai ai;
+    protected FsmAI fsmAI;
     
     public FiniteStateMachine<Team> stateMachine;
     
@@ -79,7 +79,7 @@ public class Team {
     }
     
     public Player getNearestPlayerToBall() {
-        return getNearestPlayerToPosition(ai.ball.position);
+        return getNearestPlayerToPosition(fsmAI.ball.position);
     }
     
     public boolean isNearerToOpponent(Player player, Player otherPlayer) {
@@ -89,36 +89,36 @@ public class Team {
             return player.position.x < otherPlayer.position.x;
     }
     
-    public Team(FootballPlayer[] footballPlayers, Ai ai) {
+    public Team(FootballPlayer[] footballPlayers, FsmAI fsmAI) {
         
-        this.ai = ai;
+        this.fsmAI = fsmAI;
         
-        stateMachine = new FiniteStateMachine<Team>(this, new Kickoff(this, ai), new TeamGlobalState(this, ai));
+        stateMachine = new FiniteStateMachine<Team>(this, new Kickoff(this, fsmAI), new TeamGlobalState(this, fsmAI));
         initialEnter = true;
         
         players = new Player[11];
         supportingPlayers = new ArrayList<Player>();
         
-        goalKeeper = new GoalKeeper(footballPlayers[0], ai);
+        goalKeeper = new GoalKeeper(footballPlayers[0], fsmAI);
         players[0] = goalKeeper;
         
         defenders = new ArrayList<Defender>(4);
         for (int i = 1; i <= 4; i++) {
-            Defender defender = new Defender(footballPlayers[i], ai);
+            Defender defender = new Defender(footballPlayers[i], fsmAI);
             defenders.add(defender);
             players[i] = defender;
         }
         
         midfielders = new ArrayList<Midfielder>(4);
         for (int i = 5; i <= 8; i++) {
-            Midfielder midfielder = new Midfielder(footballPlayers[i], ai);
+            Midfielder midfielder = new Midfielder(footballPlayers[i], fsmAI);
             midfielders.add(midfielder);
             players[i] = midfielder;
         }
         
         forwards = new ArrayList<Forward>(2);
         for (int i = 9; i <= 10; i++) {
-            Forward forward = new Forward(footballPlayers[i], ai);
+            Forward forward = new Forward(footballPlayers[i], fsmAI);
             forwards.add(forward);
             players[i] = forward;
         }
@@ -141,7 +141,7 @@ public class Team {
             players[i].position = state.footballPlayers[i + diff].position;
             players[i].kickVector = new Vector(0, 0);
             
-            double distToBall = Vector.distanceBetween(players[i].position, ai.ball.position);
+            double distToBall = Vector.distanceBetween(players[i].position, fsmAI.ball.position);
             
             if (distToBall < Parameters.BALL_RANGE &&
                     (playerInBallRange == null || bestDist > distToBall)) {
@@ -153,7 +153,7 @@ public class Team {
         if (firstTeam && state.kickOff) {
             isOnLeft = goalKeeper.position.x < 55;
             if (!initialEnter)
-                stateMachine.changeState(new Kickoff(this, ai));
+                stateMachine.changeState(new Kickoff(this, fsmAI));
         }
         
     }
@@ -199,14 +199,14 @@ public class Team {
     
     public boolean isKickSafe(FootballPlayer from, Vector target) {
         
-        Ball ball = ai.ball;
+        Ball ball = fsmAI.ball;
         
         if (from == null)
             return false;
         
         Vector toBall = Vector.difference(ball.position, target);
         
-        for (Player opponent : ai.opponentTeam.players) {
+        for (Player opponent : fsmAI.opponentTeam.players) {
             Vector toOpponent = Vector.difference(opponent.position, target);
             
             double k = Vector.dotProduct(toBall, toOpponent) / toBall.length();
@@ -239,14 +239,14 @@ public class Team {
     }
     
     public Vector tryGetShotOnGoal(FootballPlayer player) {
-        return tryGetShotOnGoal(player, ai.ball);
+        return tryGetShotOnGoal(player, fsmAI.ball);
     }
     
     public Vector tryGetShotOnGoal(FootballPlayer player, FootballBall ball) {
         
         for (int i = 0; i < Parameters.NUMBER_OF_GENERATED_SHOT_TARGETS; i++) {
             Vector target =
-                    new Vector(0, GameClient.FIELD_HEIGHT / 2.0 + (Ai.random.nextDouble() - 0.5) * 7.32 / 2);
+                    new Vector(0, GameClient.FIELD_HEIGHT / 2.0 + (FsmAI.random.nextDouble() - 0.5) * 7.32 / 2);
             if (isOnLeft)
                 target.x = GameClient.FIELD_WIDTH;
             
@@ -259,7 +259,7 @@ public class Team {
     }
     
     public Player tryGetSafePass(Player player) {
-        return tryGetSafePass(player, ai.ball);
+        return tryGetSafePass(player, fsmAI.ball);
     }
     
     public Player tryGetSafePass(Player player, Ball ball) {

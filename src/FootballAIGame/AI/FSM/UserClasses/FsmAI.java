@@ -11,9 +11,9 @@ import FootballAIGame.AI.FSM.UserClasses.Utilities.SupportPositionsManager;
 import java.util.Random;
 
 /**
- * The main Ai class where the AI behavior is defined.
+ * The main FsmAI class where the AI behavior is defined.
  */
-public class Ai implements FootballAI {
+public class FsmAI implements FootballAI {
     
     public static Random random;
     

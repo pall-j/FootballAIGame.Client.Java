@@ -1,7 +1,7 @@
 package FootballAIGame.AI.FSM.UserClasses.PlayerStates;
 
 import FootballAIGame.AI.FSM.CustomDataTypes.Vector;
-import FootballAIGame.AI.FSM.UserClasses.Ai;
+import FootballAIGame.AI.FSM.UserClasses.FsmAI;
 import FootballAIGame.AI.FSM.UserClasses.Entities.Ball;
 import FootballAIGame.AI.FSM.UserClasses.Entities.Player;
 import FootballAIGame.AI.FSM.UserClasses.Parameters;
@@ -15,46 +15,46 @@ public class ReceivePass extends PlayerState {
     
     private Vector passTarget;
     
-    public ReceivePass(Player player, Ai ai, Vector passTarget) {
-        super(player, ai);
+    public ReceivePass(Player player, FsmAI fsmAI, Vector passTarget) {
+        super(player, fsmAI);
         this.passTarget = passTarget;
     }
     
     @Override
     public void enter() {
-        ai.myTeam.passReceiver = player;
-        ai.myTeam.controllingPlayer = player;
+        fsmAI.myTeam.passReceiver = player;
+        fsmAI.myTeam.controllingPlayer = player;
         steeringBehavior = new Arrive(player, 1, 1.0, passTarget);
         player.steeringBehaviorsManager.addBehavior(steeringBehavior);
     }
     
     @Override
     public void run() {
-        if (ai.myTeam.passReceiver != player) {
-            player.stateMachine.changeState(new Default(player, ai));
+        if (fsmAI.myTeam.passReceiver != player) {
+            player.stateMachine.changeState(new Default(player, fsmAI));
             return;
         }
         
         // lost control
-        if (ai.opponentTeam.playerInBallRange != null && ai.myTeam.playerInBallRange == null) {
-            player.stateMachine.changeState(new Default(player, ai));
+        if (fsmAI.opponentTeam.playerInBallRange != null && fsmAI.myTeam.playerInBallRange == null) {
+            player.stateMachine.changeState(new Default(player, fsmAI));
             return;
         }
         
-        if (player.canKickBall(ai.ball)) {
-            player.stateMachine.changeState(new KickBall(player, ai));
+        if (player.canKickBall(fsmAI.ball)) {
+            player.stateMachine.changeState(new KickBall(player, fsmAI));
             return;
         }
         
-        if (Vector.distanceBetween(ai.ball.position, player.position) < Parameters.BALL_RECEIVING_RANGE) {
-            player.stateMachine.changeState(new PursueBall(player, ai));
+        if (Vector.distanceBetween(fsmAI.ball.position, player.position) < Parameters.BALL_RECEIVING_RANGE) {
+            player.stateMachine.changeState(new PursueBall(player, fsmAI));
             return;
         }
         
         updatePassTarget();
         
-        Player nearestOpponent = ai.opponentTeam.getNearestPlayerToPosition(player.position);
-        Ball ball = ai.ball;
+        Player nearestOpponent = fsmAI.opponentTeam.getNearestPlayerToPosition(player.position);
+        Ball ball = fsmAI.ball;
         
         double timeToReceive = ball.timeToCoverDistance(Vector.distanceBetween(ball.position, passTarget), ball.currentSpeed());
         
@@ -77,12 +77,12 @@ public class ReceivePass extends PlayerState {
     @Override
     public void exit() {
         player.steeringBehaviorsManager.removeBehavior(steeringBehavior);
-        if (player == ai.myTeam.passReceiver)
-            ai.myTeam.passReceiver = null;
+        if (player == fsmAI.myTeam.passReceiver)
+            fsmAI.myTeam.passReceiver = null;
     }
     
     private void updatePassTarget() {
-        Ball ball = ai.ball;
+        Ball ball = fsmAI.ball;
         double time = ball.timeToCoverDistance(Vector.distanceBetween(passTarget, ball.position), ball.currentSpeed());
         
         passTarget = ball.predictedPositionInTime(time);

@@ -1,7 +1,7 @@
 package FootballAIGame.AI.FSM.UserClasses.SteeringBehaviors;
 
 import FootballAIGame.AI.FSM.CustomDataTypes.Vector;
-import FootballAIGame.AI.FSM.UserClasses.Ai;
+import FootballAIGame.AI.FSM.UserClasses.FsmAI;
 import FootballAIGame.AI.FSM.UserClasses.Entities.Player;
 
 public class Wander extends SteeringBehavior {
@@ -35,7 +35,7 @@ public class Wander extends SteeringBehavior {
         
         // we are working in local space (Player heading = x-coordinate)
         
-        Vector diff = new Vector((Ai.random.nextDouble() - 0.5), (Ai.random.nextDouble() - 0.5), wanderJitter);
+        Vector diff = new Vector((FsmAI.random.nextDouble() - 0.5), (FsmAI.random.nextDouble() - 0.5), wanderJitter);
         
         wanderTarget = Vector.sum(wanderTarget, diff);
         wanderTarget.resize(wanderRadius);

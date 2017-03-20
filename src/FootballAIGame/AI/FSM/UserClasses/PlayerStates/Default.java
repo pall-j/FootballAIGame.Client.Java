@@ -1,6 +1,6 @@
 package FootballAIGame.AI.FSM.UserClasses.PlayerStates;
 
-import FootballAIGame.AI.FSM.UserClasses.Ai;
+import FootballAIGame.AI.FSM.UserClasses.FsmAI;
 import FootballAIGame.AI.FSM.UserClasses.Entities.GoalKeeper;
 import FootballAIGame.AI.FSM.UserClasses.Entities.Player;
 import FootballAIGame.AI.FSM.UserClasses.Entities.Team;
@@ -12,8 +12,8 @@ public class Default extends PlayerState {
     
     private Wander wander;
     
-    public Default(Player player, Ai ai) {
-        super(player, ai);
+    public Default(Player player, FsmAI fsmAI) {
+        super(player, fsmAI);
     }
     
     @Override
@@ -26,11 +26,11 @@ public class Default extends PlayerState {
     
     @Override
     public void run() {
-        Player controlling = ai.myTeam.controllingPlayer;
-        Team team = ai.myTeam;
+        Player controlling = fsmAI.myTeam.controllingPlayer;
+        Team team = fsmAI.myTeam;
         
         if (player instanceof GoalKeeper) {
-            player.stateMachine.changeState(new DefendGoal(player, ai));
+            player.stateMachine.changeState(new DefendGoal(player, fsmAI));
             return;
         }
         
@@ -40,7 +40,7 @@ public class Default extends PlayerState {
                 team.passReceiver == null) {
             MessageDispatcher.getInstance().sendMessage(new PassToPlayerMessage(player), controlling);
         } else if (!player.isAtHomeRegion()) {
-            player.stateMachine.changeState(new MoveToHomeRegion(player, ai));
+            player.stateMachine.changeState(new MoveToHomeRegion(player, fsmAI));
         }
     }
     

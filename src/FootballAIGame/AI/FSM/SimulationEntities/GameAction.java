@@ -1,7 +1,7 @@
 package FootballAIGame.AI.FSM.SimulationEntities;
 
 /**
- * Represents the Ai action that consists of the football players actions.
+ * Represents the FsmAI action that consists of the football players actions.
  */
 public class GameAction {
     
