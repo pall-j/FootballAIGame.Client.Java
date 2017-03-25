@@ -32,17 +32,17 @@ public class ServerConnection {
     private OutputStream outputStream;
     
     /**
-     * Connects to the game server.
-     *
-     * @param address  The game server IP address.
-     * @param port     The game server port.
+     * Tries to connect to the game server. In case of an error, prints an error message to the standard output.
+     * @param address The game server IP address.
+     * @param port The game server port.
      * @param userName Name of the user.
-     * @param aiName   Desired name of the AI.
-     * @return The server connection.
-     * @throws IOException Thrown if an error has occurred while connecting to the server.
+     * @param aiName Desired name of the AI.
+     * @return An authenticated connection if it was successfully established; otherwise returns null.
      */
-    public static ServerConnection connect(InetAddress address, int port, String userName, String aiName) throws IOException {
+    public static ServerConnection tryConnect(InetAddress address, int port, String userName, String aiName, String accessKey) {
+        
         ServerConnection connection = new ServerConnection();
+        
         try {
             
             connection.server = new Socket();
@@ -50,17 +50,20 @@ public class ServerConnection {
             connection.inputStream = connection.server.getInputStream();
             connection.outputStream = connection.server.getOutputStream();
             
-            connection.send("LOGIN " + userName + " " + aiName);
+            connection.send("LOGIN " + userName + " " + aiName + " " + accessKey);
             
             String message = connection.receiveMessage();
             
             if (message.equals("CONNECTED"))
                 return connection;
-            else
-                throw new IOException();
+            else {
+                System.out.println(message);
+                return null;
+            }
             
         } catch (IOException e) {
-            throw new IOException("Server is not responding.");
+            System.out.println("Server is not responding.");
+            return null;
         }
         
     }

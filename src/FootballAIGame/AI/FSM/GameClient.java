@@ -69,39 +69,75 @@ public class GameClient {
         
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         
-        try {
+        while (true) {
             
-            while (true) {
-                
-                System.out.println("Enter user name and AI name separated by whitespace.");
-                String line = reader.readLine();
-                String[] tokens = line.split(" ");
-                
-                if (tokens.length != 2) {
-                    System.out.println("Invalid format!");
-                    continue;
-                }
-                
-                try {
-                    
-                    connection = ServerConnection.connect(serverAddress, port, tokens[0], tokens[1]);
-                    System.out.println("Connected.");
-                    startProcessing();
-                    break;
-                    
-                    
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
-                
+            System.out.println("Enter user name, AI name and access key separated by whitespace.");
+            
+            String line = null;
+            try {
+                line = reader.readLine();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                continue;
             }
             
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+            if (line == null)
+                break;
+            
+            String[] tokens = line.split(" ");
+            
+            if (tokens.length != 3) {
+                System.out.println("Invalid format!");
+                continue;
+            }
+            
+            tryStart(tokens[0], tokens[1], tokens[2]);
         }
         
-        
     }
+    
+    public void start(String userName, String accessKey) {
+        
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        
+        while (true)
+        {
+            System.out.println("Enter AI name.");
+            
+            String line = null;
+            try {
+                line = reader.readLine();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
+            
+            if (line == null)
+                break;
+            
+            String[] tokens = line.split(" ");
+            
+            if (tokens.length != 1) {
+                System.out.println("Invalid format!");
+                continue;
+            }
+            
+            tryStart(userName, tokens[0], accessKey);
+        }
+    }
+    
+    public void tryStart(String userName, String aiName, String accessKey) {
+        
+        connection = ServerConnection.tryConnect(serverAddress, port, userName, aiName, accessKey);
+        
+        if (connection == null)
+            return;
+        
+        System.out.println("Connected.");
+        startProcessing();
+        return;
+    }
+    
     
     /**
      * Starts listening for game commands and processing them.
