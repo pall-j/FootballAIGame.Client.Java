@@ -2,7 +2,7 @@ package com.footballaigame.client.ais.fsm;
 
 import com.footballaigame.client.FootballAI;
 import com.footballaigame.client.simulationentities.FootballPlayer;
-import com.footballaigame.client.simulationentities.GameAction;
+import com.footballaigame.client.simulationentities.AIAction;
 import com.footballaigame.client.simulationentities.GameState;
 import com.footballaigame.client.ais.fsm.entities.Ball;
 import com.footballaigame.client.ais.fsm.entities.Team;
@@ -33,7 +33,7 @@ public class FsmAI implements FootballAI {
     }
     
     @Override
-    public GameAction getAction(GameState gameState) {
+    public AIAction getAction(GameState gameState) {
         
         if (gameState.step == 0 || myTeam == null) {
             ball = new Ball(gameState.ball);
@@ -48,7 +48,7 @@ public class FsmAI implements FootballAI {
         supportPositionsManager.update();
         
         // new action
-        GameAction currentAction = new GameAction();
+        AIAction currentAction = new AIAction();
         currentAction.step = gameState.step;
         currentAction.playerActions = myTeam.getActions();
         

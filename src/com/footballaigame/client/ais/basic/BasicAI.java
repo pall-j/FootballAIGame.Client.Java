@@ -3,7 +3,7 @@ package com.footballaigame.client.ais.basic;
 import com.footballaigame.client.customdatatypes.Vector;
 import com.footballaigame.client.FootballAI;
 import com.footballaigame.client.simulationentities.FootballPlayer;
-import com.footballaigame.client.simulationentities.GameAction;
+import com.footballaigame.client.simulationentities.AIAction;
 import com.footballaigame.client.simulationentities.GameState;
 import com.footballaigame.client.simulationentities.PlayerAction;
 
@@ -34,7 +34,7 @@ public class BasicAI implements FootballAI {
     }
     
     @Override
-    public GameAction getAction(GameState gameState) {
+    public AIAction getAction(GameState gameState) {
         
         if (gameState.step == 0)
             isOnLeft = gameState.footballPlayers[0].position.x < 55;
@@ -42,7 +42,7 @@ public class BasicAI implements FootballAI {
         if (gameState.step == 750)
             isOnLeft = !isOnLeft;
         
-        GameAction action = new GameAction();
+        AIAction action = new AIAction();
         action.playerActions = new PlayerAction[11];
         action.step = gameState.step;
         

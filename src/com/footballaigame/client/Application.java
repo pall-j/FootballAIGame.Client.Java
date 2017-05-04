@@ -18,15 +18,18 @@ public class Application {
     public static void main(String[] args) {
     
         try {
-        
-            GameClient client = new GameClient(InetAddress.getByName("gameserver.footballaigame.com"), 50030, new FsmAI());
-            //GameClient client = new GameClient(InetAddress.getLocalHost(), 50030, new FsmAI());
     
+            // ------------------------ FSM AI ----
+            //GameClient client = new GameClient(InetAddress.getByName("gameserver.footballaigame.com"), 50030, new FsmAI());
+            GameClient client = new GameClient(InetAddress.getLocalHost(), 50030, new FsmAI());
+    
+            // ----------------------- BASIC (RANDOM) AI ----
             //GameClient client = new GameClient(InetAddress.getByName("gameserver.footballaigame.com"), 50030, new BasicAI());
             //GameClient client = new GameClient(InetAddress.getLocalHost(), 50030, new BasicAI());
         
+            
             client.start();
-            //client.start("UserName", null); // fixed user with his access key (suitable for local simulators)
+            //client.start("UserName", null); // fixed user with his access key (suitable for connecting to local simulators)
         
         } catch (UnknownHostException e) {
             e.printStackTrace();

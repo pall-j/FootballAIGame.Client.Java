@@ -1,7 +1,7 @@
 package com.footballaigame.client;
 
 import com.footballaigame.client.simulationentities.FootballPlayer;
-import com.footballaigame.client.simulationentities.GameAction;
+import com.footballaigame.client.simulationentities.AIAction;
 
 import java.io.*;
 import java.net.*;
@@ -134,16 +134,36 @@ public class ServerConnection {
     }
     
     /**
-     * Sends the specified {@link GameAction} to the game server.
+     * Sends the specified {@link AIAction} to the game server.
      *
      * @param action The action to be sent.
      * @throws IOException Thrown if an error has occurred while sending the action.
      */
-    public void send(GameAction action) throws IOException {
+    public void send(AIAction action) throws IOException {
         
+    
+        if (action == null || action.playerActions == null)
+        {
+            System.err.println("Sending action error: Null action.");
+            return;
+        }
+    
+        if (action.playerActions.length < 11)
+        {
+            System.err.println("Sending action error: Invalid number of PlayerActions.");
+            return;
+        }
+    
         float[] data = new float[44];
         
         for (int i = 0; i < 11; i++) {
+    
+            if (action.playerActions[i] == null)
+            {
+                System.err.println("Sending action error: Player" + i + "'s action is null.");
+                return;
+            }
+            
             data[4 * i] = (float) action.playerActions[i].movement.x;
             data[4 * i + 1] = (float) action.playerActions[i].movement.y;
             data[4 * i + 2] = (float) action.playerActions[i].kick.x;
@@ -168,9 +188,30 @@ public class ServerConnection {
      * @throws IOException Thrown if an error has occurred while sending the players parameters.
      */
     public void sendParameters(FootballPlayer[] players) throws IOException {
+    
+        if (players == null)
+        {
+            System.err.println("Sending parameters errors: Null array of players.");
+            return;
+        }
+    
+        if (players.length < 11)
+        {
+            System.err.println("Sending parameters error: Invalid length of the player.");
+            return;
+        }
+        
         
         float[] data = new float[44];
+        
         for (int i = 0; i < 11; i++) {
+    
+            if (players[i] == null)
+            {
+                System.err.println("Sending parameters error: Player" + i + "is null.");
+                return;
+            }
+            
             data[4 * i] = players[i].speed;
             data[4 * i + 1] = players[i].precision;
             data[4 * i + 2] = players[i].possession;

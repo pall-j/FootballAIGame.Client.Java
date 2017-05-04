@@ -2,7 +2,7 @@ package com.footballaigame.client;
 
 import com.footballaigame.client.simulationentities.GameState;
 import com.footballaigame.client.simulationentities.FootballPlayer;
-import com.footballaigame.client.simulationentities.GameAction;
+import com.footballaigame.client.simulationentities.AIAction;
 
 public interface FootballAI {
     
@@ -14,12 +14,12 @@ public interface FootballAI {
     void initialize();
     
     /**
-     * Gets the {@link GameAction} for the specified {@link GameState}.
+     * Gets the {@link AIAction} for the specified {@link GameState}.
      *
      * @param state State of the game.
-     * @return The {@link GameAction} for the specified {@link GameState}.
+     * @return The {@link AIAction} for the specified {@link GameState}.
      */
-    GameAction getAction(GameState state);
+    AIAction getAction(GameState state);
     
     /**
      * Gets the player parameters. position and moving vector properties are ignored.
