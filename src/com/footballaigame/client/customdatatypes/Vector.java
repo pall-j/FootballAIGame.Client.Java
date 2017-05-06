@@ -165,7 +165,7 @@ public class Vector {
     }
     
     /**
-     * Returns the getSum of the given vectors.
+     * Returns the sum of the given vectors.
      *
      * @param first  The first vector.
      * @param second The second vector.

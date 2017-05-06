@@ -97,13 +97,9 @@ public class FootballPlayer extends MovableEntity {
     
     public Vector passBall(FootballBall ball, FootballPlayer passTarget) {
         double time = ball.getTimeToCoverDistance(Vector.getDistanceBetween(ball.position, passTarget.position), getMaxKickSpeed());
-        Vector nextPos = passTarget.getPredictedPositionInTime(time);
+        Vector nextPos = passTarget.predictPositionInTime(time);
         kickBall(ball, nextPos);
         return nextPos;
-    }
-    
-    public static double getDotProduct(Vector v1, Vector v2) {
-        return v1.x * v2.x + v1.y * v2.y;
     }
     
     public double getTimeToGetToTarget(Vector target) {

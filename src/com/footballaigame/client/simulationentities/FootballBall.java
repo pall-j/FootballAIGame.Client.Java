@@ -33,12 +33,12 @@ public class FootballBall extends MovableEntity {
         return t;
     }
     
-    public Vector getPredictedPositionInTime(double time) {
+    public Vector predictPositionInTime(double time) {
     
-        return getPredictedPositionInTimeAfterKick(time, movement);
+        return predictPositionInTimeAfterKick(time, movement);
     }
     
-    public Vector getPredictedPositionInTimeAfterKick(double time, Vector kick) {
+    public Vector predictPositionInTimeAfterKick(double time, Vector kick) {
         double kickSpeed = kick.getLength();
         
         double finalSpeed = kickSpeed - getBallDeceleration() * time;

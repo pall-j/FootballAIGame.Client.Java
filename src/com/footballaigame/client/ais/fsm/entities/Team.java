@@ -279,7 +279,7 @@ public class Team {
         return target;
     }
     
-    public Player getPredictedNearestPlayerToPosition(Vector position, double time, Player... skippedPlayers) {
+    public Player predictNearestPlayerToPosition(Vector position, double time, Player... skippedPlayers) {
         Player minPlayer = null;
         double minDistSq = 0;
         
@@ -294,7 +294,7 @@ public class Team {
             if (skipped)
                 continue;
             
-            double distSq = Vector.getDistanceBetweenSquared(player.getPredictedPositionInTime(time), position);
+            double distSq = Vector.getDistanceBetweenSquared(player.predictPositionInTime(time), position);
             if (minPlayer == null || minDistSq > distSq) {
                 minDistSq = distSq;
                 minPlayer = player;

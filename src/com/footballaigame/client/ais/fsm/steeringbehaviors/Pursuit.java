@@ -24,7 +24,7 @@ public class Pursuit extends SteeringBehavior {
         if (player.getCurrentSpeed() + target.getCurrentSpeed() > 0)
             lookAheadTime = distance / (player.getCurrentSpeed() + target.getCurrentSpeed());
         
-        targetArrive.target = target.getPredictedPositionInTime(lookAheadTime);
+        targetArrive.target = target.predictPositionInTime(lookAheadTime);
         
         return targetArrive.getAccelerationVector();
     }

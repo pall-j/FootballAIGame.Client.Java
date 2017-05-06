@@ -85,7 +85,7 @@ public class ReceivePass extends PlayerState {
         Ball ball = fsmAI.ball;
         double time = ball.getTimeToCoverDistance(Vector.getDistanceBetween(passTarget, ball.position), ball.getCurrentSpeed());
         
-        passTarget = ball.getPredictedPositionInTime(time);
+        passTarget = ball.predictPositionInTime(time);
     
         if (steeringBehavior instanceof Arrive)
             ((Arrive)steeringBehavior).target = passTarget;

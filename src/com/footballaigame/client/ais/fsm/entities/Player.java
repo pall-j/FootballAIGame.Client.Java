@@ -37,8 +37,8 @@ public abstract class Player extends FootballPlayer {
         
         Player nearest = fsmAI.opponentTeam.getNearestPlayerToPosition(position);
         
-        Vector predictedPosition = getPredictedPositionInTime(1);
-        Player predictedNearest = fsmAI.opponentTeam.getPredictedNearestPlayerToPosition(predictedPosition, 1);
+        Vector predictedPosition = predictPositionInTime(1);
+        Player predictedNearest = fsmAI.opponentTeam.predictNearestPlayerToPosition(predictedPosition, 1);
         
         return Vector.getDistanceBetween(nearest.position, position) < Parameters.DANGER_RANGE ||
                 Vector.getDistanceBetween(predictedNearest.position, predictedPosition) < Parameters.DANGER_RANGE;

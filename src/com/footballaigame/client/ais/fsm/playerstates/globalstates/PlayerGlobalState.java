@@ -50,7 +50,7 @@ public class PlayerGlobalState extends PlayerState {
             if (Double.isInfinite(time)) // pass not possible
                 return true;
             
-            Vector predictedTargetPosition = target.getPredictedPositionInTime(time);
+            Vector predictedTargetPosition = target.predictPositionInTime(time);
             
             if (player.canKickBall(ball)) {
                 player.kickBall(ball, predictedTargetPosition);
