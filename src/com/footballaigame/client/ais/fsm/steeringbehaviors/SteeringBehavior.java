@@ -11,7 +11,7 @@ public abstract class SteeringBehavior {
     
     public double weight;
     
-    public abstract Vector calculateAccelerationVector();
+    public abstract Vector getAccelerationVector();
     
     public SteeringBehavior(Player player, int priority, double weight) {
         this.player = player;

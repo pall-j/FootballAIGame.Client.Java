@@ -46,7 +46,7 @@ public class ReceivePass extends PlayerState {
             return;
         }
         
-        if (Vector.distanceBetween(fsmAI.ball.position, player.position) < Parameters.BALL_RECEIVING_RANGE) {
+        if (Vector.getDistanceBetween(fsmAI.ball.position, player.position) < Parameters.BALL_RECEIVING_RANGE) {
             player.stateMachine.changeState(new PursueBall(player, fsmAI));
             return;
         }
@@ -56,10 +56,10 @@ public class ReceivePass extends PlayerState {
         Player nearestOpponent = fsmAI.opponentTeam.getNearestPlayerToPosition(player.position);
         Ball ball = fsmAI.ball;
         
-        double timeToReceive = ball.timeToCoverDistance(Vector.distanceBetween(ball.position, passTarget), ball.currentSpeed());
+        double timeToReceive = ball.getTimeToCoverDistance(Vector.getDistanceBetween(ball.position, passTarget), ball.getCurrentSpeed());
         
-        if (nearestOpponent.timeToGetToTarget(passTarget) < timeToReceive ||
-                player.timeToGetToTarget(passTarget) > timeToReceive) {
+        if (nearestOpponent.getTimeToGetToTarget(passTarget) < timeToReceive ||
+                player.getTimeToGetToTarget(passTarget) > timeToReceive) {
             if (steeringBehavior instanceof Arrive) {
                 player.steeringBehaviorsManager.removeBehavior(steeringBehavior);
                 steeringBehavior = new Pursuit(player, steeringBehavior.priority, steeringBehavior.weight, ball);
@@ -83,9 +83,9 @@ public class ReceivePass extends PlayerState {
     
     private void updatePassTarget() {
         Ball ball = fsmAI.ball;
-        double time = ball.timeToCoverDistance(Vector.distanceBetween(passTarget, ball.position), ball.currentSpeed());
+        double time = ball.getTimeToCoverDistance(Vector.getDistanceBetween(passTarget, ball.position), ball.getCurrentSpeed());
         
-        passTarget = ball.predictedPositionInTime(time);
+        passTarget = ball.getPredictedPositionInTime(time);
     
         if (steeringBehavior instanceof Arrive)
             ((Arrive)steeringBehavior).target = passTarget;

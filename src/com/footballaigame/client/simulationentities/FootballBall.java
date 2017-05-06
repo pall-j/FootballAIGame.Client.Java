@@ -8,18 +8,18 @@ public class FootballBall extends MovableEntity {
     public static final double MAX_DISTANCE_FOR_KICK = 2; // [m]
     
     /**
-     * Gets the ball's deceleration in meters per simulation step squared.
+     * Returns the ball's deceleration in meters per simulation step squared.
      *
      * @return The ball's deceleration in meters per simulation step squared.
      */
-    public static double ballDeceleration() {
+    public static double getBallDeceleration() {
         return 1.5 * Math.pow(GameClient.STEP_INTERVAL / 1000.0, 2);
     }
     
-    public double timeToCoverDistance(double distance, double kickPower) {
+    public double getTimeToCoverDistance(double distance, double kickPower) {
        
         double v0 = kickPower;
-        double a = ballDeceleration();
+        double a = getBallDeceleration();
         double s = distance;
         
         // s = v0*t - 1/2 at^2   --> at^2 - 2v0t + 2s = 0  (quadratic equation)
@@ -33,25 +33,25 @@ public class FootballBall extends MovableEntity {
         return t;
     }
     
-    public Vector predictedPositionInTime(double time) {
+    public Vector getPredictedPositionInTime(double time) {
     
-        return predictedPositionInTimeAfterKick(time, movement);
+        return getPredictedPositionInTimeAfterKick(time, movement);
     }
     
-    public Vector predictedPositionInTimeAfterKick(double time, Vector kick) {
-        double kickSpeed = kick.length();
+    public Vector getPredictedPositionInTimeAfterKick(double time, Vector kick) {
+        double kickSpeed = kick.getLength();
         
-        double finalSpeed = kickSpeed - ballDeceleration() * time;
+        double finalSpeed = kickSpeed - getBallDeceleration() * time;
         
         if (Math.abs(kickSpeed) < 0.001)
             return position;
         
         if (finalSpeed < 0 || Double.isInfinite(time))
-            time = kickSpeed / ballDeceleration(); // time to stop
+            time = kickSpeed / getBallDeceleration(); // time to stop
         
-        Vector diff = Vector.sum(kick.getResized(time * kickSpeed),
-                kick.getResized(-1 / 2.0 * ballDeceleration() * time * time));
+        Vector diff = Vector.getSum(kick.getResized(time * kickSpeed),
+                kick.getResized(-1 / 2.0 * getBallDeceleration() * time * time));
         
-        return Vector.sum(position, diff);
+        return Vector.getSum(position, diff);
     }
 }

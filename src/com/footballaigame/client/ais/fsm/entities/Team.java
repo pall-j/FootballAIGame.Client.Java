@@ -68,7 +68,7 @@ public class Team {
             if (isSkipped)
                 continue;
             
-            double distSq = Vector.distanceBetweenSquared(player.position, position);
+            double distSq = Vector.getDistanceBetweenSquared(player.position, position);
             if (minPlayer == null || minDistSq > distSq) {
                 minDistSq = distSq;
                 minPlayer = player;
@@ -141,7 +141,7 @@ public class Team {
             players[i].position = state.footballPlayers[i + diff].position;
             players[i].kickVector = new Vector(0, 0);
             
-            double distToBall = Vector.distanceBetween(players[i].position, fsmAI.ball.position);
+            double distToBall = Vector.getDistanceBetween(players[i].position, fsmAI.ball.position);
             
             if (distToBall < Parameters.BALL_RANGE &&
                     (playerInBallRange == null || bestDist > distToBall)) {
@@ -204,27 +204,27 @@ public class Team {
         if (from == null)
             return false;
         
-        Vector toBall = Vector.difference(ball.position, target);
+        Vector toBall = Vector.getDifference(ball.position, target);
         
         for (Player opponent : fsmAI.opponentTeam.players) {
-            Vector toOpponent = Vector.difference(opponent.position, target);
+            Vector toOpponent = Vector.getDifference(opponent.position, target);
             
-            double k = Vector.dotProduct(toBall, toOpponent) / toBall.length();
-            Vector interposeTarget = Vector.sum(target, toBall.getResized(k));
-            double opponentToInterposeDist = Vector.distanceBetween(opponent.position, interposeTarget);
+            double k = Vector.getDotProduct(toBall, toOpponent) / toBall.getLength();
+            Vector interposeTarget = Vector.getSum(target, toBall.getResized(k));
+            double opponentToInterposeDist = Vector.getDistanceBetween(opponent.position, interposeTarget);
             
             Vector opponentToKickablePosition = new Vector(opponent.position, interposeTarget,
                     Math.max(0, opponentToInterposeDist - FootballBall.MAX_DISTANCE_FOR_KICK));
             
-            Vector kickablePosition = Vector.sum(opponent.position, opponentToKickablePosition);
+            Vector kickablePosition = Vector.getSum(opponent.position, opponentToKickablePosition);
             
-            if (k > toBall.length() || k <= 0)
+            if (k > toBall.getLength() || k <= 0)
                 continue; // safe
             
-            double ballToInterposeDist = Vector.distanceBetween(ball.position, interposeTarget);
+            double ballToInterposeDist = Vector.getDistanceBetween(ball.position, interposeTarget);
             
-            double t1 = ball.timeToCoverDistance(ballToInterposeDist, from.maxKickSpeed());
-            double t2 = opponent.timeToGetToTarget(kickablePosition);
+            double t1 = ball.getTimeToCoverDistance(ballToInterposeDist, from.getMaxKickSpeed());
+            double t2 = opponent.getTimeToGetToTarget(kickablePosition);
             
             if (t2 < t1)
                 return false;
@@ -235,7 +235,7 @@ public class Team {
     
     public boolean isKickPossible(FootballPlayer player, Vector target, FootballBall ball) {
         return !Double.isInfinite(
-                ball.timeToCoverDistance(Vector.distanceBetween(ball.position, target), player.maxKickSpeed()));
+                ball.getTimeToCoverDistance(Vector.getDistanceBetween(ball.position, target), player.getMaxKickSpeed()));
     }
     
     public Vector tryGetShotOnGoal(FootballPlayer player) {
@@ -294,7 +294,7 @@ public class Team {
             if (skipped)
                 continue;
             
-            double distSq = Vector.distanceBetweenSquared(player.predictedPositionInTime(time), position);
+            double distSq = Vector.getDistanceBetweenSquared(player.getPredictedPositionInTime(time), position);
             if (minPlayer == null || minDistSq > distSq) {
                 minDistSq = distSq;
                 minPlayer = player;

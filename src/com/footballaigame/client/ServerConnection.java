@@ -197,7 +197,7 @@ public class ServerConnection {
     
         if (players.length < 11)
         {
-            System.err.println("Sending parameters error: Invalid length of the player.");
+            System.err.println("Sending parameters error: Invalid getLength of the player.");
             return;
         }
         

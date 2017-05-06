@@ -44,13 +44,13 @@ public class PlayerGlobalState extends PlayerState {
             Ball ball = fsmAI.ball;
             Player target = ((PassToPlayerMessage) message).receiver;
             
-            double time = ball.timeToCoverDistance(Vector.distanceBetween(target.position, ball.position),
-                    player.maxKickSpeed());
+            double time = ball.getTimeToCoverDistance(Vector.getDistanceBetween(target.position, ball.position),
+                    player.getMaxKickSpeed());
             
             if (Double.isInfinite(time)) // pass not possible
                 return true;
             
-            Vector predictedTargetPosition = target.predictedPositionInTime(time);
+            Vector predictedTargetPosition = target.getPredictedPositionInTime(time);
             
             if (player.canKickBall(ball)) {
                 player.kickBall(ball, predictedTargetPosition);

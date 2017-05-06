@@ -50,8 +50,8 @@ public class FootballPlayer extends MovableEntity {
      *
      * @return The player's current speed in meters per simulation step.
      */
-    public double currentSpeed() {
-        return movement.length();
+    public double getCurrentSpeed() {
+        return movement.getLength();
     }
     
     /**
@@ -59,7 +59,7 @@ public class FootballPlayer extends MovableEntity {
      *
      * @return The maximum allowed speed of the player in meters per simulation step.
      */
-    public double maxSpeed() {
+    public double getMaxSpeed() {
         return (4 + speed * 2 / 0.4) * GameClient.STEP_INTERVAL / 1000.0;
     }
     
@@ -68,7 +68,7 @@ public class FootballPlayer extends MovableEntity {
      *
      * @return The maximum allowed kickVector speed in meters per simulation step of football player.
      */
-    public double maxKickSpeed() {
+    public double getMaxKickSpeed() {
         return (15 + kickPower * 5) * GameClient.STEP_INTERVAL / 1000.0;
     }
     
@@ -77,47 +77,47 @@ public class FootballPlayer extends MovableEntity {
      *
      * @return The maximum allowed acceleration in meters per simulation step squared of football player.
      */
-    public double maxAcceleration() {
+    public double getMaxAcceleration() {
         return 5 * Math.pow(GameClient.STEP_INTERVAL / 1000.0, 2);
     }
     
     public boolean canKickBall(FootballBall ball) {
-        return Vector.distanceBetween(position, ball.position) <= FootballBall.MAX_DISTANCE_FOR_KICK;
+        return Vector.getDistanceBetween(position, ball.position) <= FootballBall.MAX_DISTANCE_FOR_KICK;
     }
     
     public void kickBall(FootballBall ball, Vector target) {
-        kickBall(ball, target, maxKickSpeed());
+        kickBall(ball, target, getMaxKickSpeed());
     }
     
     public void kickBall(FootballBall ball, Vector target, double kickAcceleration) {
-        if (kickAcceleration > maxKickSpeed())
-            kickAcceleration = maxKickSpeed();
+        if (kickAcceleration > getMaxKickSpeed())
+            kickAcceleration = getMaxKickSpeed();
         kickVector = new Vector(ball.position, target, kickAcceleration);
     }
     
     public Vector passBall(FootballBall ball, FootballPlayer passTarget) {
-        double time = ball.timeToCoverDistance(Vector.distanceBetween(ball.position, passTarget.position), maxKickSpeed());
-        Vector nextPos = passTarget.predictedPositionInTime(time);
+        double time = ball.getTimeToCoverDistance(Vector.getDistanceBetween(ball.position, passTarget.position), getMaxKickSpeed());
+        Vector nextPos = passTarget.getPredictedPositionInTime(time);
         kickBall(ball, nextPos);
         return nextPos;
     }
     
-    public static double DotProduct(Vector v1, Vector v2) {
+    public static double getDotProduct(Vector v1, Vector v2) {
         return v1.x * v2.x + v1.y * v2.y;
     }
     
-    public double timeToGetToTarget(Vector target) {
+    public double getTimeToGetToTarget(Vector target) {
         // this is only approx. (continuous acceleration)
         
-        Vector toTarget = Vector.difference(target, position);
-        if (toTarget.length() < 0.001)
+        Vector toTarget = Vector.getDifference(target, position);
+        if (toTarget.getLength() < 0.001)
             return 0;
         
-        double v0 = Vector.dotProduct(toTarget, movement) / toTarget.length();
-        double v1 = maxSpeed();
-        double a = maxAcceleration();
+        double v0 = Vector.getDotProduct(toTarget, movement) / toTarget.getLength();
+        double v1 = getMaxSpeed();
+        double a = getMaxAcceleration();
         double t1 = (v1 - v0) / a;
-        double s = Vector.distanceBetween(position, target);
+        double s = Vector.getDistanceBetween(position, target);
         
         double s1 = v0 * t1 + 1 / 2.0 * a * t1 * t1; // distance traveled during acceleration
         if (s1 >= s) // target reached during acceleration

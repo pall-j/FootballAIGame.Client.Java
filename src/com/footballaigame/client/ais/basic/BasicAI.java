@@ -84,15 +84,15 @@ public class BasicAI implements FootballAI {
             }
             
             // acceleration correction
-            Vector toNewMovement = Vector.difference(playerAction.movement, player.movement);
-            toNewMovement.truncate(player.maxAcceleration());
-            playerAction.movement = Vector.sum(player.movement, toNewMovement);
+            Vector toNewMovement = Vector.getDifference(playerAction.movement, player.movement);
+            toNewMovement.truncate(player.getMaxAcceleration());
+            playerAction.movement = Vector.getSum(player.movement, toNewMovement);
             
             // speed correction
-            playerAction.movement.truncate(player.maxSpeed());
+            playerAction.movement.truncate(player.getMaxSpeed());
             
             // kickVector correction
-            playerAction.kick.truncate(player.maxKickSpeed());
+            playerAction.kick.truncate(player.getMaxKickSpeed());
         }
         
         return action;

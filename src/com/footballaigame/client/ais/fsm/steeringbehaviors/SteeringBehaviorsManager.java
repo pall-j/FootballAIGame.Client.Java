@@ -70,25 +70,25 @@ public class SteeringBehaviorsManager {
         return result;
     }
     
-    public Vector calculateAccelerationVector() {
+    public Vector getAccelerationVector() {
         
         // Weighted Prioritized Truncated Sum method used
         
         Vector acceleration = new Vector(0, 0);
-        double accelerationRemaining = player.maxAcceleration();
+        double accelerationRemaining = player.getMaxAcceleration();
         
         for (Map.Entry<Integer, List<SteeringBehavior>> keyValuePair : steeringBehaviors.entrySet()) {
             List<SteeringBehavior> list = keyValuePair.getValue();
             
             for (SteeringBehavior steeringbehavior : list) {
-                Vector behaviorAcceleration = steeringbehavior.calculateAccelerationVector();
+                Vector behaviorAcceleration = steeringbehavior.getAccelerationVector();
                 behaviorAcceleration.multiply(steeringbehavior.weight);
                 
-                if (accelerationRemaining - behaviorAcceleration.length() < 0)
+                if (accelerationRemaining - behaviorAcceleration.getLength() < 0)
                     behaviorAcceleration.resize(accelerationRemaining);
-                accelerationRemaining -= behaviorAcceleration.length();
+                accelerationRemaining -= behaviorAcceleration.getLength();
                 
-                acceleration = Vector.sum(acceleration, behaviorAcceleration);
+                acceleration = Vector.getSum(acceleration, behaviorAcceleration);
                 
                 if (accelerationRemaining <= 0)
                     break;
@@ -98,9 +98,9 @@ public class SteeringBehaviorsManager {
                 break;
         }
     
-        Vector nextMovement = Vector.sum(player.movement, acceleration);
-        nextMovement.truncate(player.maxSpeed());
-        acceleration = Vector.difference(nextMovement, player.movement);
+        Vector nextMovement = Vector.getSum(player.movement, acceleration);
+        nextMovement.truncate(player.getMaxSpeed());
+        acceleration = Vector.getDifference(nextMovement, player.movement);
         
         return acceleration;
     }

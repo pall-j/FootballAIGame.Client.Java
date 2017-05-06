@@ -17,15 +17,15 @@ public class Pursuit extends SteeringBehavior {
     }
     
     @Override
-    public Vector calculateAccelerationVector() {
-        double distance = Vector.distanceBetween(player.position, target.position);
+    public Vector getAccelerationVector() {
+        double distance = Vector.getDistanceBetween(player.position, target.position);
         
         double lookAheadTime = 0;
-        if (player.currentSpeed() + target.currentSpeed() > 0)
-            lookAheadTime = distance / (player.currentSpeed() + target.currentSpeed());
+        if (player.getCurrentSpeed() + target.getCurrentSpeed() > 0)
+            lookAheadTime = distance / (player.getCurrentSpeed() + target.getCurrentSpeed());
         
-        targetArrive.target = target.predictedPositionInTime(lookAheadTime);
+        targetArrive.target = target.getPredictedPositionInTime(lookAheadTime);
         
-        return targetArrive.calculateAccelerationVector();
+        return targetArrive.getAccelerationVector();
     }
 }

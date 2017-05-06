@@ -16,20 +16,20 @@ public class Flee extends SteeringBehavior {
     }
     
     @Override
-    public Vector calculateAccelerationVector() {
+    public Vector getAccelerationVector() {
         
-        if (Vector.distanceBetween(player.position, from) >= safeDistance)
+        if (Vector.getDistanceBetween(player.position, from) >= safeDistance)
             return new Vector(0, 0);
         
-        Vector desiredMovement = Vector.difference(player.movement, from);
+        Vector desiredMovement = Vector.getDifference(player.movement, from);
         
-        if (Math.abs(desiredMovement.lengthSquared()) < 0.01)
+        if (Math.abs(desiredMovement.getLengthSquared()) < 0.01)
             desiredMovement = new Vector(1, 0);
         
-        desiredMovement.resize(player.maxSpeed());
+        desiredMovement.resize(player.getMaxSpeed());
         
-        Vector acceleration = Vector.difference(desiredMovement, player.movement);
-        acceleration.truncate(player.maxAcceleration());
+        Vector acceleration = Vector.getDifference(desiredMovement, player.movement);
+        acceleration.truncate(player.getMaxAcceleration());
         
         return acceleration;
     }

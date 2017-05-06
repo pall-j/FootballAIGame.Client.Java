@@ -29,9 +29,9 @@ public class Dribble extends PlayerState {
         if (player.position.x < 21 && !fsmAI.myTeam.isOnLeft)
             target = new Vector(10, GameClient.FIELD_HEIGHT / 2.0 + (FsmAI.random.nextDouble() - 0.5) * 7.32);
         
-        Vector kickDirection = Vector.difference(target, player.position);
-        Vector playerFutureMovement = Vector.sum(player.movement, kickDirection.getResized(player.maxAcceleration())).getTruncated(player.maxSpeed());
-        double futureSpeedInKickDirection = Vector.dotProduct(playerFutureMovement, kickDirection) / kickDirection.length();
+        Vector kickDirection = Vector.getDifference(target, player.position);
+        Vector playerFutureMovement = Vector.getSum(player.movement, kickDirection.getResized(player.getMaxAcceleration())).getTruncated(player.getMaxSpeed());
+        double futureSpeedInKickDirection = Vector.getDotProduct(playerFutureMovement, kickDirection) / kickDirection.getLength();
         
         player.kickBall(fsmAI.ball, target, futureSpeedInKickDirection);
         

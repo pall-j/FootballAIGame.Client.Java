@@ -22,7 +22,7 @@ public abstract class Player extends FootballPlayer {
     
     public PlayerAction getAction() {
         PlayerAction action = new PlayerAction();
-        action.movement = Vector.sum(steeringBehaviorsManager.calculateAccelerationVector(), movement);
+        action.movement = Vector.getSum(steeringBehaviorsManager.getAccelerationVector(), movement);
         action.kick = kickVector;
         return action;
     }
@@ -30,18 +30,18 @@ public abstract class Player extends FootballPlayer {
     public abstract void processMessage(Message message);
     
     public boolean isAtHomeRegion() {
-        return Vector.distanceBetween(homeRegion.center, position) <= Parameters.PLAYER_IN_HOME_REGION_RANGE;
+        return Vector.getDistanceBetween(homeRegion.center, position) <= Parameters.PLAYER_IN_HOME_REGION_RANGE;
     }
     
     public boolean isInDanger() {
         
         Player nearest = fsmAI.opponentTeam.getNearestPlayerToPosition(position);
         
-        Vector predictedPosition = predictedPositionInTime(1);
+        Vector predictedPosition = getPredictedPositionInTime(1);
         Player predictedNearest = fsmAI.opponentTeam.getPredictedNearestPlayerToPosition(predictedPosition, 1);
         
-        return Vector.distanceBetween(nearest.position, position) < Parameters.DANGER_RANGE ||
-                Vector.distanceBetween(predictedNearest.position, predictedPosition) < Parameters.DANGER_RANGE;
+        return Vector.getDistanceBetween(nearest.position, position) < Parameters.DANGER_RANGE ||
+                Vector.getDistanceBetween(predictedNearest.position, predictedPosition) < Parameters.DANGER_RANGE;
     }
     
     protected Player(FootballPlayer player, FsmAI fsmAI) {

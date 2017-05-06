@@ -25,19 +25,19 @@ public class Evade extends SteeringBehavior {
     }
     
     @Override
-    public Vector calculateAccelerationVector() {
+    public Vector getAccelerationVector() {
         
-        double distance = Vector.distanceBetween(player.position, target.position);
+        double distance = Vector.getDistanceBetween(player.position, target.position);
         
         double lookAheadTime = 0;
-        if (player.currentSpeed() + target.currentSpeed() > 0)
-            lookAheadTime = distance / (player.currentSpeed() + target.currentSpeed());
+        if (player.getCurrentSpeed() + target.getCurrentSpeed() > 0)
+            lookAheadTime = distance / (player.getCurrentSpeed() + target.getCurrentSpeed());
         
-        Vector predictedPosition = Vector.sum(target.position,
+        Vector predictedPosition = Vector.getSum(target.position,
                 target.movement.getMultiplied(lookAheadTime));
         
         fleeFromTarget.from = predictedPosition;
         
-        return fleeFromTarget.calculateAccelerationVector();
+        return fleeFromTarget.getAccelerationVector();
     }
 }

@@ -36,7 +36,7 @@ public class SupportControlling extends PlayerState {
         
         // goalkeeper shouldn't go too far from his home region
         if (player instanceof GoalKeeper &&
-                Vector.distanceBetween(arrive.target, player.homeRegion.center) > Parameters.MAX_GOALKEEPER_SUPPORTING_DISTANCE) {
+                Vector.getDistanceBetween(arrive.target, player.homeRegion.center) > Parameters.MAX_GOALKEEPER_SUPPORTING_DISTANCE) {
             MessageDispatcher.getInstance().sendMessage(new SupportControllingMessage(), nearest);
             player.stateMachine.changeState(new Default(player, fsmAI));
             return;

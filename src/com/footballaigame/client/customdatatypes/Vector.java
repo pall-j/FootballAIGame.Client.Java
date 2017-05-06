@@ -50,20 +50,20 @@ public class Vector {
     }
     
     /**
-     * Returns the vector length.
+     * Returns the vector getLength.
      *
-     * @return The vector length.
+     * @return The vector getLength.
      */
-    public double length() {
+    public double getLength() {
         return Math.sqrt(x * x + y * y);
     }
     
     /**
-     * Returns the vector length squared.
+     * Returns the vector getLength squared.
      *
-     * @return The length squared.
+     * @return The getLength squared.
      */
-    public double lengthSquared() {
+    public double getLengthSquared() {
         return x * x + y * y;
     }
     
@@ -71,7 +71,7 @@ public class Vector {
      * Normalizes this instance.
      */
     public void normalize() {
-        double length = length();
+        double length = getLength();
         x /= length;
         y /= length;
     }
@@ -107,9 +107,9 @@ public class Vector {
     }
     
     /**
-     * Resizes the current instance to the specified new length.
+     * Resizes the current instance to the specified new getLength.
      *
-     * @param newSize The new length.
+     * @param newSize The new getLength.
      */
     public void resize(double newSize) {
         normalize();
@@ -118,7 +118,7 @@ public class Vector {
     }
     
     public void truncate(double maxLength) {
-        if (length() > maxLength)
+        if (getLength() > maxLength)
             resize(maxLength);
     }
     
@@ -134,7 +134,7 @@ public class Vector {
      * @param secondVector The second vector.
      * @return The distance between the given vectors.
      */
-    public static double distanceBetween(Vector firstVector, Vector secondVector) {
+    public static double getDistanceBetween(Vector firstVector, Vector secondVector) {
         return Math.sqrt(Math.pow(firstVector.x - secondVector.x, 2) + Math.pow(firstVector.y - secondVector.y, 2));
     }
     
@@ -145,7 +145,7 @@ public class Vector {
      * @param secondVector The second vector.
      * @return The distance between the given vectors.
      */
-    public static double distanceBetweenSquared(Vector firstVector, Vector secondVector) {
+    public static double getDistanceBetweenSquared(Vector firstVector, Vector secondVector) {
         return Math.pow(firstVector.x - secondVector.x, 2) + Math.pow(firstVector.y - secondVector.y, 2);
     }
     
@@ -156,22 +156,22 @@ public class Vector {
      * @param secondVector The second vector.
      * @return The dot product between the given vectors.
      */
-    public static double dotProduct(Vector firstVector, Vector secondVector) {
+    public static double getDotProduct(Vector firstVector, Vector secondVector) {
         return firstVector.x * secondVector.x + firstVector.y * secondVector.y;
     }
     
-    public static Vector difference(Vector to, Vector from) {
+    public static Vector getDifference(Vector to, Vector from) {
         return new Vector(to.x - from.x, to.y - from.y);
     }
     
     /**
-     * Returns the sum of the given vectors.
+     * Returns the getSum of the given vectors.
      *
      * @param first  The first vector.
      * @param second The second vector.
-     * @return The sum of the given vectors.
+     * @return The getSum of the given vectors.
      */
-    public static Vector sum(Vector first, Vector second) {
+    public static Vector getSum(Vector first, Vector second) {
         return new Vector(first.x + second.x, first.y + second.y);
     }
 }

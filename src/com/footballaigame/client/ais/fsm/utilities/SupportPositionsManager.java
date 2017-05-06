@@ -86,7 +86,7 @@ public class SupportPositionsManager {
     }
     
     private double getDistanceFromControllingScore(Vector position) {
-        double distance = Vector.distanceBetween(position, fsmAI.myTeam.controllingPlayer.position);
+        double distance = Vector.getDistanceBetween(position, fsmAI.myTeam.controllingPlayer.position);
         
         double diff = Math.abs(distance - Parameters.OPTIMAL_DISTANCE_FROM_CONTROLLING);
         

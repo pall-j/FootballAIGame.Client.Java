@@ -24,7 +24,7 @@ public class InterceptBall extends PlayerState {
     @Override
     public void run() {
         if (fsmAI.myTeam.stateMachine.currentState instanceof Attacking ||
-                Vector.distanceBetween(player.position, fsmAI.myTeam.getGoalCenter()) >
+                Vector.getDistanceBetween(player.position, fsmAI.myTeam.getGoalCenter()) >
                         Parameters.GOALKEEPER_INTERCEPT_RANGE) {
             player.stateMachine.changeState(new DefendGoal(player, fsmAI));
         }

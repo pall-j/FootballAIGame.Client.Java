@@ -21,7 +21,7 @@ public class MoveToHomeRegion extends PlayerState {
     @Override
     public void run() {
         moveToHomeRegionArrive.target = player.homeRegion.center;
-        if (player.isAtHomeRegion() && Math.abs(player.currentSpeed()) < 0.00001)
+        if (player.isAtHomeRegion() && Math.abs(player.getCurrentSpeed()) < 0.00001)
             player.stateMachine.changeState(new Default(player, fsmAI));
     }
     

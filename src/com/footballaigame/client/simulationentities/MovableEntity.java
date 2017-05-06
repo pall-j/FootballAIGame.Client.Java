@@ -14,11 +14,11 @@ public class MovableEntity {
      */
     public Vector position;
     
-    public double currentSpeed() {
-        return movement.length();
+    public double getCurrentSpeed() {
+        return movement.getLength();
     }
     
-    public Vector predictedPositionInTime(double time) {
-        return Vector.sum(position, movement.getMultiplied(time));
+    public Vector getPredictedPositionInTime(double time) {
+        return Vector.getSum(position, movement.getMultiplied(time));
     }
 }

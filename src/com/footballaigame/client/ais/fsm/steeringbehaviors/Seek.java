@@ -13,16 +13,16 @@ public class Seek extends SteeringBehavior {
     }
     
     @Override
-    public Vector calculateAccelerationVector() {
+    public Vector getAccelerationVector() {
         Vector acceleration = new Vector(0, 0);
         
         if (target == null) return acceleration;
         
-        Vector desiredMovement = Vector.difference(target, player.position);
-        desiredMovement.truncate(player.maxSpeed());
+        Vector desiredMovement = Vector.getDifference(target, player.position);
+        desiredMovement.truncate(player.getMaxSpeed());
         
-        acceleration = Vector.difference(desiredMovement, player.movement);
-        acceleration.truncate(player.maxAcceleration());
+        acceleration = Vector.getDifference(desiredMovement, player.movement);
+        acceleration.truncate(player.getMaxAcceleration());
         
         return acceleration;
     }

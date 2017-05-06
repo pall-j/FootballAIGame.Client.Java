@@ -21,7 +21,7 @@ public class Interpose extends SteeringBehavior {
         this.first = first;
         this.second = second;
         arrive = new Arrive(player, priority, weight, player.position);
-        preferredDistanceFromSecond = Vector.distanceBetween(second.position, first.position) / 2.0;
+        preferredDistanceFromSecond = Vector.getDistanceBetween(second.position, first.position) / 2.0;
     }
     
     public Interpose(Player player, int priority, double weight, MovableEntity first, Vector secondPosition) {
@@ -32,32 +32,32 @@ public class Interpose extends SteeringBehavior {
         this.second.position = secondPosition;
         
         arrive = new Arrive(player, priority, weight, player.position);
-        preferredDistanceFromSecond = Vector.distanceBetween(second.position, first.position) / 2.0;
+        preferredDistanceFromSecond = Vector.getDistanceBetween(second.position, first.position) / 2.0;
     }
     
     @Override
-    public Vector calculateAccelerationVector() {
+    public Vector getAccelerationVector() {
         
         Vector firstToSecond = new Vector(first.position, second.position);
         Vector firstToPlayer = new Vector(first.position, player.position);
         
-        double firstToTargetDistance = Vector.dotProduct(firstToPlayer, firstToSecond) / firstToSecond.length();
+        double firstToTargetDistance = Vector.getDotProduct(firstToPlayer, firstToSecond) / firstToSecond.getLength();
         
-        if (firstToTargetDistance < 0 || firstToTargetDistance > firstToSecond.length()) {
-            arrive.target = Vector.sum(first.position, firstToSecond.getMultiplied(1 / 2.0)); // go to midpoint
-            return arrive.calculateAccelerationVector();
+        if (firstToTargetDistance < 0 || firstToTargetDistance > firstToSecond.getLength()) {
+            arrive.target = Vector.getSum(first.position, firstToSecond.getMultiplied(1 / 2.0)); // go to midpoint
+            return arrive.getAccelerationVector();
         }
         
-        arrive.target = Vector.sum(first.position, firstToSecond.getResized(firstToTargetDistance));
+        arrive.target = Vector.getSum(first.position, firstToSecond.getResized(firstToTargetDistance));
         
-        double playerToTargetDistance = Vector.distanceBetween(arrive.target, player.position);
+        double playerToTargetDistance = Vector.getDistanceBetween(arrive.target, player.position);
         
-        if (playerToTargetDistance < 0.01 && firstToSecond.length() > preferredDistanceFromSecond) {
+        if (playerToTargetDistance < 0.01 && firstToSecond.getLength() > preferredDistanceFromSecond) {
             // move player to meet DistanceFromSecond condition
-            arrive.target = Vector.sum(first.position, firstToSecond.getResized(firstToSecond.length() - preferredDistanceFromSecond));
+            arrive.target = Vector.getSum(first.position, firstToSecond.getResized(firstToSecond.getLength() - preferredDistanceFromSecond));
         }
         
         
-        return arrive.calculateAccelerationVector();
+        return arrive.getAccelerationVector();
     }
 }
