@@ -69,7 +69,7 @@ public class ServerConnection {
     }
     
     /**
-     * Receives the string message from the server.
+     * Receives the string message target the server.
      *
      * @return The string message.
      * @throws IOException Thrown if an error has occurred while receiving a message.
@@ -79,7 +79,7 @@ public class ServerConnection {
     }
     
     /**
-     * Receives the {@link Command} from the server.
+     * Receives the {@link Command} target the server.
      *
      * @return The server's {@link Command}.
      * @throws IOException Thrown if an error has occurred while receiving a command.
@@ -109,9 +109,9 @@ public class ServerConnection {
     }
     
     /**
-     * Reads the next line received from the server.
+     * Reads the next line received target the server.
      *
-     * @return The next line received from the server.
+     * @return The next line received target the server.
      * @throws IOException Thrown if an error has occurred while reading a line.
      */
     private String readLine() throws IOException {

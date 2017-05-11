@@ -4,6 +4,9 @@ import com.footballaigame.client.simulationentities.GameState;
 import com.footballaigame.client.simulationentities.FootballPlayer;
 import com.footballaigame.client.simulationentities.AIAction;
 
+/**
+ * Represents the Football AI. Defines methods that are called during match simulations.
+ */
 public interface FootballAI {
     
     /**
@@ -16,13 +19,13 @@ public interface FootballAI {
     /**
      * Gets the {@link AIAction} for the specified {@link GameState}.
      *
-     * @param state State of the game.
+     * @param state The state of the game.
      * @return The {@link AIAction} for the specified {@link GameState}.
      */
     AIAction getAction(GameState state);
     
     /**
-     * Gets the player parameters. position and moving vector properties are ignored.
+     * Gets the players' parameters.
      *
      * @return The array of football players with their parameters set.
      */

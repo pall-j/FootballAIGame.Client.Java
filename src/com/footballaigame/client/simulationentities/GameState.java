@@ -7,13 +7,13 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 /**
- * Represents the state of the football game.
+ * Represents the state of the football match.
  */
 public class GameState {
     
     /**
-     * The football players array consisting of 22 players, where first 11
-     * players are from the player's team and the rest 11 players are from the opponent's team.
+     * The football players' array consisting of 22 players, where first 11
+     * players are target the player's team and the other 11 players are target the opponent's team.
      */
     public FootballPlayer[] footballPlayers;
     
@@ -27,6 +27,9 @@ public class GameState {
      */
     public int step;
     
+    /**
+     * The value indicating whether a kickoff is happening.
+     */
     public boolean kickOff;
     
     /**

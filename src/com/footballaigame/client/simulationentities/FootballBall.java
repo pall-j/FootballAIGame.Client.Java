@@ -3,8 +3,14 @@ package com.footballaigame.client.simulationentities;
 import com.footballaigame.client.customdatatypes.Vector;
 import com.footballaigame.client.GameClient;
 
+/**
+ * Represents the football ball in the simulation.
+ */
 public class FootballBall extends MovableEntity {
     
+    /**
+     * The maximum allowed distance for kick to be successful.
+     */
     public static final double MAX_DISTANCE_FOR_KICK = 2; // [m]
     
     /**
@@ -16,6 +22,12 @@ public class FootballBall extends MovableEntity {
         return 1.5 * Math.pow(GameClient.STEP_INTERVAL / 1000.0, 2);
     }
     
+    /**
+     * Gets the time that is needed to cover the specified distance.
+     * @param distance The distance.
+     * @param kickPower The kick power that would be applied.
+     * @return The time that is need to cover the specified distance.
+     */
     public double getTimeToCoverDistance(double distance, double kickPower) {
        
         double v0 = kickPower;
@@ -33,11 +45,22 @@ public class FootballBall extends MovableEntity {
         return t;
     }
     
+    /**
+     * Predicts the position in time.
+     * @param time The time.
+     * @return The predicted position {@link Vector}.
+     */
     public Vector predictPositionInTime(double time) {
     
         return predictPositionInTimeAfterKick(time, movement);
     }
     
+    /**
+     * Predicts the position in time after kick.
+     * @param time The time.
+     * @param kick The kick.
+     * @return The predicted position {@link Vector}.
+     */
     public Vector predictPositionInTimeAfterKick(double time, Vector kick) {
         double kickSpeed = kick.getLength();
         

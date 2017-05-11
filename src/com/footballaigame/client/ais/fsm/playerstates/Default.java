@@ -8,14 +8,28 @@ import com.footballaigame.client.ais.fsm.messaging.MessageDispatcher;
 import com.footballaigame.client.ais.fsm.messaging.messages.PassToPlayerMessage;
 import com.footballaigame.client.ais.fsm.steeringbehaviors.Wander;
 
+/**
+ * Represents the player's default state. Its the initial state of all players.
+ */
 public class Default extends PlayerState {
     
+    /**
+     * The wander.
+     */
     private Wander wander;
     
+    /**
+     * Initializes a new instance of the {@link Default} class.
+     * @param player The player.
+     * @param fsmAI The {@link FsmAI} instance to which this instance belongs.
+     */
     public Default(Player player, FsmAI fsmAI) {
         super(player, fsmAI);
     }
     
+    /**
+     * Occurs when the entity enters to this state.
+     */
     @Override
     public void enter() {
         
@@ -24,6 +38,9 @@ public class Default extends PlayerState {
         player.steeringBehaviorsManager.addBehavior(wander);
     }
     
+    /**
+     * Occurs every simulation step while the entity is in this state.
+     */
     @Override
     public void run() {
         Player controlling = fsmAI.myTeam.controllingPlayer;
@@ -44,6 +61,9 @@ public class Default extends PlayerState {
         }
     }
     
+    /**
+     * Occurs when the entity leaves this state.
+     */
     @Override
     public void exit() {
         player.steeringBehaviorsManager.removeBehavior(wander);

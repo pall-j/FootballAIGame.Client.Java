@@ -13,10 +13,18 @@ public class Defending extends TeamState {
     
     private List<Interpose> Interposes;
     
+    /**
+     * Initializes a new instance of the {@link Defending} class.
+     * @param team The {@link Team} to which this instance belongs.
+     * @param fsmAI The {@link FsmAI} instance to which this instance belongs.
+     */
     public Defending(Team team, FsmAI fsmAI) {
         super(team, fsmAI);
     }
     
+    /**
+     * Sets the home regions of the team's players.
+     */
     @Override
     public void setHomeRegions() {
         
@@ -44,6 +52,9 @@ public class Defending extends TeamState {
         }
     }
     
+    /**
+     * Occurs when the entity enters to this state.
+     */
     @Override
     public void enter() {
         setHomeRegions();
@@ -68,6 +79,9 @@ public class Defending extends TeamState {
         team.forwards.get(1).steeringBehaviorsManager.addBehavior(interpose2);
     }
     
+    /**
+     * Occurs every simulation step while the entity is in this state.
+     */
     @Override
     public void run() {
         
@@ -79,6 +93,9 @@ public class Defending extends TeamState {
         updateSteeringBehaviors();
     }
     
+    /**
+     * Occurs when the entity leaves this state.
+     */
     @Override
     public void exit() {
         for (int i = 0; i < 2; i++)

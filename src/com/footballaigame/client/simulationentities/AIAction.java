@@ -1,13 +1,13 @@
 package com.footballaigame.client.simulationentities;
 
 /**
- * Represents the FsmAI action that consists of the football players actions.
+ * Represents the AI action that consists of the football players' actions.
  */
 public class AIAction {
     
     /**
      * The player's actions. When this instance is sent to the server, there should be 11
-     * players with their movement and kickVector vectors set.
+     * players with their movement and kick vectors set.
      */
     public PlayerAction[] playerActions;
     

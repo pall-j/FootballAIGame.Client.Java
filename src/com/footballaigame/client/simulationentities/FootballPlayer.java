@@ -3,8 +3,14 @@ package com.footballaigame.client.simulationentities;
 import com.footballaigame.client.customdatatypes.Vector;
 import com.footballaigame.client.GameClient;
 
+/**
+ * Represents the football player in the simulation.
+ */
 public class FootballPlayer extends MovableEntity {
     
+    /**
+     * The identifier.
+     */
     public int id;
     
     /**
@@ -33,7 +39,7 @@ public class FootballPlayer extends MovableEntity {
     
     /**
      * The kickVector of the player. <p>
-     * It describes movement vector that ball would get if the kickVector was done with 100% precision.
+     * It describes movement {@link Vector} that ball would get if the kick was done with 100% precision.
      */
     public Vector kickVector;
     
@@ -81,20 +87,42 @@ public class FootballPlayer extends MovableEntity {
         return 5 * Math.pow(GameClient.STEP_INTERVAL / 1000.0, 2);
     }
     
+    /**
+     * Determines whether the player can kick the specified ball.
+     * @param ball The ball.
+     * @return True if the player can kick the specified ball; otherwise, false.
+     */
     public boolean canKickBall(FootballBall ball) {
         return Vector.getDistanceBetween(position, ball.position) <= FootballBall.MAX_DISTANCE_FOR_KICK;
     }
     
+    /**
+     * Kicks the ball to the specified target with the maximum kick speed. Sets the kick vector accordingly.
+     * @param ball The ball.
+     * @param target The kick target.
+     */
     public void kickBall(FootballBall ball, Vector target) {
         kickBall(ball, target, getMaxKickSpeed());
     }
     
-    public void kickBall(FootballBall ball, Vector target, double kickAcceleration) {
-        if (kickAcceleration > getMaxKickSpeed())
-            kickAcceleration = getMaxKickSpeed();
-        kickVector = new Vector(ball.position, target, kickAcceleration);
+    /**
+     * Kicks the ball to the specified target with the specified kick speed. Sets the kick vector accordingly.
+     * @param ball The ball.
+     * @param target The kick target.
+     * @param kickSpeed The kick speed.
+     */
+    public void kickBall(FootballBall ball, Vector target, double kickSpeed) {
+        if (kickSpeed > getMaxKickSpeed())
+            kickSpeed = getMaxKickSpeed();
+        kickVector = new Vector(ball.position, target, kickSpeed);
     }
     
+    /**
+     * Passes the specified ball to the specified player. Sets the kick vector accordingly.
+     * @param ball The ball.
+     * @param passTarget The pass target player.
+     * @return The kick target.
+     */
     public Vector passBall(FootballBall ball, FootballPlayer passTarget) {
         double time = ball.getTimeToCoverDistance(Vector.getDistanceBetween(ball.position, passTarget.position), getMaxKickSpeed());
         Vector nextPos = passTarget.predictPositionInTime(time);
@@ -102,6 +130,11 @@ public class FootballPlayer extends MovableEntity {
         return nextPos;
     }
     
+    /**
+     * Gets the approximated time to get to the specified position.
+     * @param target The target position.
+     * @return The approximated time to get to target.
+     */
     public double getTimeToGetToTarget(Vector target) {
         // this is only approx. (continuous acceleration)
         

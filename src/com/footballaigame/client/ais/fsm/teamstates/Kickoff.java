@@ -7,16 +7,34 @@ import com.footballaigame.client.ais.fsm.playerstates.Default;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the team's kickoff state. This is the initial state of the team.
+ * The team's state is changed to this when the kickoff is happening.
+ * When the team enters this state, all its players' states are changed to {@link Default}.
+ * The team's state is changed to {@link Attacking} if the team is doing the kickoff.
+ * Otherwise the state is changed to {@link Defending}.
+ */
 public class Kickoff extends TeamState {
     
+    /**
+     * Initializes a new instance of the {@link Kickoff} class.
+     * @param team The {@link Team} to which this instance belongs.
+     * @param fsmAI The {@link FsmAI} instance to which this instance belongs.
+     */
     public Kickoff(Team team, FsmAI fsmAI) {
         super(team, fsmAI);
     }
     
+    /**
+     * Sets the home regions of the team's players.
+     */
     @Override
     public void setHomeRegions() {
     }
     
+    /**
+     * Occurs when the entity enters to this state.
+     */
     @Override
     public void enter() {
         
@@ -36,6 +54,9 @@ public class Kickoff extends TeamState {
         }
     }
     
+    /**
+     * Occurs every simulation step while the entity is in this state.
+     */
     @Override
     public void run() {
         

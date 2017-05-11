@@ -8,17 +8,32 @@ import com.footballaigame.client.ais.fsm.entities.Team;
 import com.footballaigame.client.ais.fsm.messaging.MessageDispatcher;
 import com.footballaigame.client.ais.fsm.messaging.messages.SupportControllingMessage;
 
+/**
+ * Represents team's attacking state. The team stays in this state while its controlling the ball.
+ * When the team looses the ball, the state is changed to {@link Defending}.
+ */
 public class Attacking extends TeamState {
     
+    /**
+     * Initializes a new instance of the {@link Attacking} class.
+     * @param team The {@link Team} to which this instance belongs.
+     * @param fsmAI The {@link FsmAI} instance to which this instance belongs.
+     */
     public Attacking(Team team, FsmAI fsmAI) {
         super(team, fsmAI);
     }
     
+    /**
+     * Occurs when the entity enters to this state.
+     */
     @Override
     public void enter() {
         setHomeRegions();
     }
     
+    /**
+     * Sets the home regions of the team's players.
+     */
     @Override
     public void setHomeRegions() {
         
@@ -47,6 +62,9 @@ public class Attacking extends TeamState {
         
     }
     
+    /**
+     * Occurs every simulation step while the entity is in this state.
+     */
     @Override
     public void run() {
         if (team.playerInBallRange == null &&

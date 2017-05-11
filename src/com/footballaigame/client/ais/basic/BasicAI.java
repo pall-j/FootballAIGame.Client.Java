@@ -14,25 +14,39 @@ import java.util.Random;
  */
 public class BasicAI implements FootballAI {
     
+    /**
+     * The {@link Random} that is used for generating random numbers.
+     */
     public static Random random;
     
     /**
-     * The value indicating whether the AI's football team holds currently the left goal post.
+     * Gets or sets the football players with their parameters set. <p>
+     * Set after GetParameters is called. Used to know players' parameters at every {@link #getAction(GameState)} call.
+     */
+    private FootballPlayer[] players;
+    
+    /**
+     * The value indicating whether the AI's football team currently holds the left goal post.
      */
     private boolean isOnLeft;
     
     /**
-     * Gets or sets the football players with their parameters set. <p>
-     * Set after GetParameters is called. Used to know players parameters at every {@link #getAction(GameState)} call.
+     * Called every time the new match simulation with the AI starts.
+     * <p>
+     * Called before {@link #getParameters()}.
      */
-    private FootballPlayer[] players;
-    
     @Override
     public void initialize() {
         if (random == null)
             random = new Random();
     }
     
+    /**
+     * Gets the {@link AIAction} for the specified {@link GameState}.
+     *
+     * @param gameState The state of the game.
+     * @return The {@link AIAction} for the specified {@link GameState}.
+     */
     @Override
     public AIAction getAction(GameState gameState) {
         
@@ -98,6 +112,11 @@ public class BasicAI implements FootballAI {
         return action;
     }
     
+    /**
+     * Gets the players' parameters.
+     *
+     * @return The array of football players with their parameters set.
+     */
     @Override
     public FootballPlayer[] getParameters() {
         

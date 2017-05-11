@@ -17,43 +17,97 @@ import com.footballaigame.client.ais.fsm.teamstates.TeamState;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the football team.
+ */
 public class Team {
     
+    /**
+     * A value indicating whether the initial states' (of the team and its players) enter methods
+     * have already been called.
+     */
     private boolean initialEnter;
     
+    /**
+     * The {@link FsmAI} instance to which this instance belongs.
+     */
     protected FsmAI fsmAI;
     
+    /**
+     * The finite state machine of the team.
+     */
     public FiniteStateMachine<Team> stateMachine;
     
+    /**
+     * The array of team's players.
+     */
     public Player[] players;
     
+    /**
+     * The team's goalkeeper.
+     */
     public GoalKeeper goalKeeper;
     
+    /**
+     * The list of team's defenders.
+     */
     public List<Defender> defenders;
     
+    /**
+     * The list of team's midfielders.
+     */
     public List<Midfielder> midfielders;
     
+    /**
+     * The list of team's forwards.
+     */
     public List<Forward> forwards;
     
+    /**
+     * The player that is in the ball range.
+     * Player is in ball range if he is nearer than {@link Parameters#BALL_RANGE} target the ball.
+     * If there are more players in the ball range, only one of them is referenced target here.
+     */
     public Player playerInBallRange;
     
+    /**
+     * The player, that is currently controlling the ball.
+     */
     public Player controllingPlayer;
     
+    /**
+     * The current pass receiver.
+     */
     public Player passReceiver;
     
+    /**
+     * The list of supporting players that support the current controlling player.
+     */
     public List<Player> supportingPlayers;
     
     /**
-     * Indicates whether the team holds currently the left goal post.
+     * The value indicating whether the team currently holds the left goal post.
      */
     public boolean isOnLeft;
     
+    /**
+     * Gets the team's goal center.
+     * @return The team's goal center position {@link Vector}.
+     */
     public Vector getGoalCenter() {
         return isOnLeft
                 ? new Vector(0, GameClient.FIELD_HEIGHT / 2)
                 : new Vector(GameClient.FIELD_WIDTH, GameClient.FIELD_HEIGHT / 2);
     }
     
+    /**
+     * Gets the nearest player, target the team's players besides the specified skipped players,
+     * to the specified position.
+     * @param position The position.
+     * @param skippedPlayers The skipped players.
+     * @return The nearest team's {@link Player} if there is at least one player outside of the
+     * specified skipped players; otherwise, null.</returns>
+     */
     public Player getNearestPlayerToPosition(Vector position, Player... skippedPlayers) {
         Player minPlayer = null;
         double minDistSq = 0;
@@ -78,10 +132,21 @@ public class Team {
         return minPlayer;
     }
     
+    /**
+     * Gets the nearest team's player to the ball.
+     * @return The nearest team's {@link Player} to the ball.
+     */
     public Player getNearestPlayerToBall() {
         return getNearestPlayerToPosition(fsmAI.ball.position);
     }
     
+    /**
+     * Determines whether the specified player is nearer to an opponent than other specified player.
+     * @param player The player.
+     * @param otherPlayer The other player.
+     * @return True if the specified player is nearer to an opponent than the second specified player; otherwise,
+     *         false.
+     */
     public boolean isNearerToOpponent(Player player, Player otherPlayer) {
         if (isOnLeft)
             return player.position.x > otherPlayer.position.x;
@@ -89,6 +154,11 @@ public class Team {
             return player.position.x < otherPlayer.position.x;
     }
     
+    /**
+     * Initializes a new instance of the {@link Team} class.
+     * @param footballPlayers The team's football players.
+     * @param fsmAI The {@link FsmAI} instance to which this instance belongs.
+     */
     public Team(FootballPlayer[] footballPlayers, FsmAI fsmAI) {
         
         this.fsmAI = fsmAI;
@@ -130,6 +200,11 @@ public class Team {
         
     }
     
+    /**
+     * Loads the state. Updates position and movement vectors of all team's players accordingly.
+     * @param state The game state.
+     * @param firstTeam If set to true, then the team is the first team target the match.
+     */
     public void loadState(GameState state, boolean firstTeam) {
         
         int diff = firstTeam ? 0 : 11;
@@ -158,6 +233,10 @@ public class Team {
         
     }
     
+    /**
+     * Gets the team's players' actions in the current state..
+     * @return The array of {@link PlayerAction} containing the actions of the team's players in the current state.
+     */
     public PlayerAction[] getActions() {
         if (initialEnter) {
             
@@ -189,19 +268,35 @@ public class Team {
         return actions;
     }
     
+    /**
+     * Processes the specified message.
+     * @param message The message.
+     */
     public void processMessage(Message message) {
         stateMachine.processMessage(this, message);
     }
     
+    /**
+     * Determines whether the pass target the controlling player to the specified target is safe target opponents.
+     * @param target The target.
+     * @return True if the pass target the controlling player to the specified target is safe; otherwise, false.
+     *         If there isn't a controlling player, then returns false.
+     */
     public boolean isPassFromControllingSafe(Vector target) {
-        return isKickSafe(controllingPlayer, target);
+        return isPassSafe(controllingPlayer, target);
     }
     
-    public boolean isKickSafe(FootballPlayer from, Vector target) {
+    /**
+     * Determines whether the pass target the specified player to the specified target is safe target opponents.
+     * @param player The player.
+     * @param target The target.
+     * @return True if the pass target the specified player to the specified target is safe; otherwise, false.
+     */
+    public boolean isPassSafe(FootballPlayer player, Vector target) {
         
         Ball ball = fsmAI.ball;
         
-        if (from == null)
+        if (player == null)
             return false;
         
         Vector toBall = Vector.getDifference(ball.position, target);
@@ -223,7 +318,7 @@ public class Team {
             
             double ballToInterposeDist = Vector.getDistanceBetween(ball.position, interposeTarget);
             
-            double t1 = ball.getTimeToCoverDistance(ballToInterposeDist, from.getMaxKickSpeed());
+            double t1 = ball.getTimeToCoverDistance(ballToInterposeDist, player.getMaxKickSpeed());
             double t2 = opponent.getTimeToGetToTarget(kickablePosition);
             
             if (t2 < t1)
@@ -233,15 +328,33 @@ public class Team {
         return true;
     }
     
-    public boolean isKickPossible(FootballPlayer player, Vector target, FootballBall ball) {
+    /**
+     * Determines whether the pass target the specified player to the specified target is possible.
+     * @param player The player.
+     * @param target The target.
+     * @param ball The ball.
+     * @return True if the pass target the specified player to the specified target is possible; otherwise, false.
+     */
+    public boolean isPassPossible(FootballPlayer player, Vector target, FootballBall ball) {
         return !Double.isInfinite(
                 ball.getTimeToCoverDistance(Vector.getDistanceBetween(ball.position, target), player.getMaxKickSpeed()));
     }
     
+    /**
+     * Tries to get the shot on goal. The shot must be safe target opponent.
+     * @param player The player.
+     * @return The shot target {@link Vector} if the shot on goal was found; otherwise, null.
+     */
     public Vector tryGetShotOnGoal(FootballPlayer player) {
         return tryGetShotOnGoal(player, fsmAI.ball);
     }
     
+    /**
+     * Tries to get the shot on goal with the specified ball. The shot must be safe target opponent.
+     * @param player The player.
+     * @param ball The ball.
+     * @return The shot target {@link Vector} if the shot on goal was found; otherwise, null.
+     */
     public Vector tryGetShotOnGoal(FootballPlayer player, FootballBall ball) {
         
         for (int i = 0; i < Parameters.NUMBER_OF_GENERATED_SHOT_TARGETS; i++) {
@@ -250,7 +363,7 @@ public class Team {
             if (isOnLeft)
                 target.x = GameClient.FIELD_WIDTH;
             
-            if (isKickPossible(player, target, ball) && isKickSafe(player, target)) {
+            if (isPassPossible(player, target, ball) && isPassSafe(player, target)) {
                 return target;
             }
         }
@@ -258,10 +371,21 @@ public class Team {
         return null;
     }
     
+    /**
+     * Tries to get the safe pass form the specified player to any other team's player.
+     * @param player The player.
+     * @return The pass target {@link Player} if the safe pass was found; otherwise, null.
+     */
     public Player tryGetSafePass(Player player) {
         return tryGetSafePass(player, fsmAI.ball);
     }
     
+    /**
+     * Tries to get the safe pass form the specified player to any other team's player with the specified ball.
+     * @param player The player.
+     * @param ball The ball.
+     * @return The pass target {@link Player} if the safe pass was found; otherwise, null.
+     */
     public Player tryGetSafePass(Player player, Ball ball) {
         Player target = null;
         
@@ -269,7 +393,7 @@ public class Team {
             if (player == otherPlayer)
                 continue;
             
-            if (isKickPossible(player, otherPlayer.position, ball) && isKickSafe(player, otherPlayer.position)) {
+            if (isPassPossible(player, otherPlayer.position, ball) && isPassSafe(player, otherPlayer.position)) {
                 if (target == null || (isOnLeft && target.position.x < otherPlayer.position.x) ||
                         (!isOnLeft && target.position.x > otherPlayer.position.x))
                     target = otherPlayer;
@@ -279,6 +403,15 @@ public class Team {
         return target;
     }
     
+    /**
+     * Predicts the nearest team's player, besides the specified skipped players,
+     * to the specified position in the specified time.
+     * @param position The position.
+     * @param time The relative time to the current time.
+     * @param skippedPlayers The skipped players.
+     * @return The nearest {@link Player} to the specified position in the specified time if there is at
+     *         least one player outside of the specified skipped players; otherwise, null.
+     */
     public Player predictNearestPlayerToPosition(Vector position, double time, Player... skippedPlayers) {
         Player minPlayer = null;
         double minDistSq = 0;

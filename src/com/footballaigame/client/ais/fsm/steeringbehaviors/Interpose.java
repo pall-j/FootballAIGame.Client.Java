@@ -6,16 +6,40 @@ import com.footballaigame.client.simulationentities.MovableEntity;
 import com.footballaigame.client.ais.fsm.entities.Ball;
 import com.footballaigame.client.ais.fsm.entities.Player;
 
+/**
+ * Represents the behavior where the player is moving to a position between the specified entities.
+ */
 public class Interpose extends SteeringBehavior {
     
+    /**
+     * The first entity.
+     */
     public MovableEntity first;
     
+    /**
+     * The second entity.
+     */
     public MovableEntity second;
     
+    /**
+     * The arrive behavior, that is used to move to a position
+     * between the first and the second entity.
+     */
     private Arrive arrive;
     
+    /**
+     * The preferred distance from the second entity.
+     */
     public double preferredDistanceFromSecond;
     
+    /**
+     * Initializes a new instance of the {@link Interpose} class.
+     * @param player The player.
+     * @param priority The priority.
+     * @param weight The weight.
+     * @param first The first entity.
+     * @param second The second entity.
+     */
     public Interpose(Player player, int priority, double weight, MovableEntity first, MovableEntity second) {
         super(player, priority, weight);
         this.first = first;
@@ -24,6 +48,15 @@ public class Interpose extends SteeringBehavior {
         preferredDistanceFromSecond = Vector.getDistanceBetween(second.position, first.position) / 2.0;
     }
     
+    /**
+     * Initializes a new instance of the {@link Interpose} class.
+     * @param player The player.
+     * @param priority The priority.
+     * @param weight The weight.
+     * @param first The first entity.
+     * @param secondPosition The second position that is used instead of entity.
+     * The artificial second entity is created at this position.
+     */
     public Interpose(Player player, int priority, double weight, MovableEntity first, Vector secondPosition) {
         super(player, priority, weight);
         
@@ -35,6 +68,10 @@ public class Interpose extends SteeringBehavior {
         preferredDistanceFromSecond = Vector.getDistanceBetween(second.position, first.position) / 2.0;
     }
     
+    /**
+     * Gets the current acceleration vector of the behavior.
+     * @return The acceleration {@link Vector}.
+     */
     @Override
     public Vector getAccelerationVector() {
         

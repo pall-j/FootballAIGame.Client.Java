@@ -8,17 +8,37 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Responsible for managing player's steering behaviors.
+ * Provides methods for adding and removing steering behavior of the player.
+ * Combines the behaviors in accordance with their priority and weight.
+ */
 public class SteeringBehaviorsManager {
     
+    /**
+     * The player to whom this instance belongs..
+     */
     private Player player;
     
+    /**
+     * The {@link TreeMap} that holds the active steering behaviors with keys
+     * equal to the behaviors' priorities.
+     */
     private TreeMap<Integer, List<SteeringBehavior>> steeringBehaviors;
     
+    /**
+     *Initializes a new instance of the {@link SteeringBehaviorsManager} class.
+     * @param player The player.
+     */
     public SteeringBehaviorsManager(Player player) {
         steeringBehaviors = new TreeMap<Integer, List<SteeringBehavior>>();
         this.player = player;
     }
     
+    /**
+     * Adds the specified behavior.
+     * @param behavior The behavior.
+     */
     public void addBehavior(SteeringBehavior behavior) {
         List<SteeringBehavior> list;
         list = steeringBehaviors.get(behavior.priority);
@@ -32,12 +52,21 @@ public class SteeringBehaviorsManager {
         }
     }
     
+    /**
+     * Removes the specified behavior.
+     * @param behavior The behavior.
+     */
     public void removeBehavior(SteeringBehavior behavior) {
         List<SteeringBehavior> list = steeringBehaviors.get(behavior.priority);
         if (list != null)
             list.remove(behavior);
     }
     
+    /**
+     * Removes all behaviors of the specified type.
+     * @param typeClass The type class.
+     * @param <T> The type.
+     */
     public <T> void removeAllBehaviorsOfType(Class<T> typeClass) {
         for (Map.Entry<Integer, List<SteeringBehavior>> entry : steeringBehaviors.entrySet()) {
             
@@ -54,6 +83,12 @@ public class SteeringBehaviorsManager {
         }
     }
     
+    /**
+     * Gets all behaviors of the specified type.
+     * @param typeClass The type class.
+     * @param <T> The type.
+     * @return {@link List} of all active {@link SteeringBehavior}s of the specified type.
+     */
     public <T> List<SteeringBehavior> getAllBehaviorsOfType(Class<T> typeClass) {
         List<SteeringBehavior> result = new LinkedList<SteeringBehavior>();
         
@@ -70,6 +105,10 @@ public class SteeringBehaviorsManager {
         return result;
     }
     
+    /**
+     * Gets the current acceleration vector by combining the active behaviors accordingly.
+     * @return The acceleration {@link Vector}.
+     */
     public Vector getAccelerationVector() {
         
         // Weighted Prioritized Truncated Sum method used
@@ -105,6 +144,9 @@ public class SteeringBehaviorsManager {
         return acceleration;
     }
     
+    /**
+     * Removes all active behaviors.
+     */
     public void reset() {
         steeringBehaviors = new TreeMap<Integer, List<SteeringBehavior>>();
     }

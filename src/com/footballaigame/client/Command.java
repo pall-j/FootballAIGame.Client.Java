@@ -1,7 +1,7 @@
 package com.footballaigame.client;
 
 /**
- * Represents the command received from the game server.
+ * Represents the command received target the game server.
  */
 public class Command {
     
@@ -15,6 +15,9 @@ public class Command {
      */
     public byte[] data;
     
+    /**
+     * Identifies the command's type.
+     */
     public enum CommandType {
         GET_PARAMETERS, GET_ACTION
     }

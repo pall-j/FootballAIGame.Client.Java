@@ -84,7 +84,7 @@ public class GameClient {
             if (line == null)
                 break;
             
-            String[] tokens = line.split(" ");
+            String[] tokens = line.trim().split(" ");
             
             if (tokens.length != 3) {
                 System.out.println("Invalid format!");
@@ -96,6 +96,11 @@ public class GameClient {
         
     }
     
+    /**
+     * Starts this instance. Starts logging in process. Uses the specified parameters for logging in.
+     * @param userName The user's name.
+     * @param accessKey The access key.
+     */
     public void start(String userName, String accessKey) {
         
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -115,9 +120,9 @@ public class GameClient {
             if (line == null)
                 break;
             
-            String[] tokens = line.split(" ");
+            String[] tokens = line.trim().split(" ");
             
-            if (tokens.length != 1) {
+            if (tokens.length != 1 || tokens[0].length() == 0) {
                 System.out.println("Invalid format!");
                 continue;
             }
@@ -126,6 +131,12 @@ public class GameClient {
         }
     }
     
+    /**
+     * Tries to start this instance by logging in to server with the specified parameters.
+     * @param userName The user name.
+     * @param aiName The AI name.
+     * @param accessKey The access key.
+     */
     public void tryStart(String userName, String aiName, String accessKey) {
         
         connection = ServerConnection.tryConnect(serverAddress, port, userName, aiName, accessKey);
@@ -137,7 +148,6 @@ public class GameClient {
         startProcessing();
         return;
     }
-    
     
     /**
      * Starts listening for game commands and processing them.

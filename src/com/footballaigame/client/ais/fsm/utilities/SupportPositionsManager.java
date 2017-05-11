@@ -11,21 +11,45 @@ import com.footballaigame.client.ais.fsm.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Provides functionality to evaluate positions by certain criteria and
+ * find the best supporting positions accordingly.
+ */
 public class SupportPositionsManager {
     
+    /**
+     * The {@link FsmAI} instance to which this instance belongs.
+     */
     private FsmAI fsmAI;
     
+    /**
+     * Initializes a new instance of the {@link SupportPositionsManager} class.
+     * @param fsmAI The {@link FsmAI} instance to which this instance belongs.
+     */
     public SupportPositionsManager(FsmAI fsmAI) {
         createSupportPositions();
         this.fsmAI = fsmAI;
     }
     
+    /**
+     * The support positions in the left (x less than 55) half of the field.
+     */
     private List<SupportPosition> leftSupportPositions;
     
+    /**
+     * The support positions in the right (x greater than 55) half of the field.
+     */
     private List<SupportPosition> rightSupportPositions;
     
+    /**
+     * The support positions.
+     */
     private List<SupportPosition> supportPositions;
     
+    /**
+     * Gets the best support position.
+     * @return The best support position.
+     */
     public Vector getBestSupportPosition() {
         
         SupportPosition bestPosition = supportPositions.get(0);
@@ -37,11 +61,18 @@ public class SupportPositionsManager {
         return bestPosition.position;
     }
     
+    /**
+     * Updates the support positions in accordance with the current state.
+     */
     public void update() {
         for (SupportPosition supportPosition : supportPositions)
             updatePosition(supportPosition);
     }
     
+    /**
+     * Updates the support position in accordance with the current state.
+     * @param supportPosition The support position.
+     */
     private void updatePosition(SupportPosition supportPosition) {
         supportPosition.score = 0;
         
@@ -68,11 +99,16 @@ public class SupportPositionsManager {
             supportPosition.shootScore += Parameters.SHOT_ON_GOAL_POSSIBLE_WEIGHT;
         }
         
-        // distance from opponent
+        // distance target opponent
         
         
     }
     
+    /**
+     * Determines whether the shot on goal target the specified position is possible.
+     * @param position The position.
+     * @return True if a shot on goal target the specified position is possible; otherwise, false.
+     */
     private boolean isShotOnGoalPossible(Vector position) {
         // we expect the lowest possible max kicking power of the player
     
@@ -85,6 +121,11 @@ public class SupportPositionsManager {
         return (fsmAI.myTeam.tryGetShotOnGoal(artificialPlayer, artificialBall) != null);
     }
     
+    /**
+     * Gets the distance target controlling player score of the specified position.
+     * @param position The position.
+     * @return The distance target controlling player score of the specified position.
+     */
     private double getDistanceFromControllingScore(Vector position) {
         double distance = Vector.getDistanceBetween(position, fsmAI.myTeam.controllingPlayer.position);
         
@@ -96,6 +137,9 @@ public class SupportPositionsManager {
         return 0;
     }
     
+    /**
+     * Creates the support positions.
+     */
     private void createSupportPositions() {
         leftSupportPositions = new ArrayList<SupportPosition>();
         rightSupportPositions = new ArrayList<SupportPosition>();
@@ -120,18 +164,44 @@ public class SupportPositionsManager {
         }
     }
     
-    public class SupportPosition {
-        
+    /**
+     * Represents the support position with its scores.
+     */
+    private class SupportPosition {
+    
+        /**
+         * The position.
+         */
         public Vector position;
-        
+    
+        /**
+         * The score.
+         */
         public double score;
-        
+    
+        /**
+         * The distance score. This score is higher if the position is
+         * nearer controlling player.
+         */
         public double distanceScore;
-        
+    
+        /**
+         * The shoot score. This score is higher if a shot on goal is
+         * possible target this position.
+         */
         public double shootScore;
-        
+    
+        /**
+         * The pass score. This score is higher if the pass target controlling player
+         * to this position is possible.
+         */
         public double passScore;
-        
+    
+        /**
+         * Initializes a new instance of the {@link SupportPosition} class.
+         * @param position The position.
+         * @param score The score.
+         */
         public SupportPosition(Vector position, double score) {
             this.position = position;
             this.score = score;

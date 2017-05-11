@@ -9,17 +9,33 @@ import com.footballaigame.client.ais.fsm.entities.Player;
 import com.footballaigame.client.ais.fsm.messaging.Message;
 import com.footballaigame.client.ais.fsm.messaging.MessageDispatcher;
 
+/**
+ * Represents the player global state.
+ */
 public class PlayerGlobalState extends PlayerState {
     
+    /**
+     * Initializes a new instance of the {@link PlayerGlobalState} class.
+     * @param player The player.
+     * @param fsmAI The {@link FsmAI} instance to which this instance belongs.
+     */
     protected PlayerGlobalState(Player player, FsmAI fsmAI) {
         super(player, fsmAI);
     }
     
+    /**
+     * Occurs every simulation step while the entity is in this state.
+     */
     @Override
     public void run() {
         
     }
     
+    /**
+     * Processes the specified message.
+     * @param message The message.
+     * @return True if the specified message was handled; otherwise, false.
+     */
     @Override
     public boolean processMessage(Message message) {
         

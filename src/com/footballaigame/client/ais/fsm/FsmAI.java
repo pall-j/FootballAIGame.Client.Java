@@ -11,20 +11,40 @@ import com.footballaigame.client.ais.fsm.utilities.SupportPositionsManager;
 import java.util.Random;
 
 /**
- * The main FsmAI class where the AI behavior is defined.
+ * Represents the FSM AI.
  */
 public class FsmAI implements FootballAI {
     
+    /**
+     * The {@link Random} that is used for generating random numbers.
+     */
     public static Random random;
     
+    /**
+     * The ball.
+     */
     public Ball ball;
     
+    /**
+     * My (AI's) team.
+     */
     public Team myTeam;
     
+    /**
+     * The opponent's team.
+     */
     public Team opponentTeam;
     
+    /**
+     * The support positions manager.
+     */
     public SupportPositionsManager supportPositionsManager;
     
+    /**
+     * Called every time the new match simulation with the AI starts.
+     * <p>
+     * Called before {@link #getParameters()}.
+     */
     @Override
     public void initialize() {
         if (random == null)
@@ -32,6 +52,12 @@ public class FsmAI implements FootballAI {
         supportPositionsManager = new SupportPositionsManager(this);
     }
     
+    /**
+     * Gets the {@link AIAction} for the specified {@link GameState}.
+     *
+     * @param gameState The state of the game.
+     * @return The {@link AIAction} for the specified {@link GameState}.
+     */
     @Override
     public AIAction getAction(GameState gameState) {
         
@@ -55,6 +81,11 @@ public class FsmAI implements FootballAI {
         return currentAction;
     }
     
+    /**
+     * Gets the players' parameters.
+     *
+     * @return The array of football players with their parameters set.
+     */
     @Override
     public FootballPlayer[] getParameters() {
         

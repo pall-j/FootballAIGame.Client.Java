@@ -3,15 +3,33 @@ package com.footballaigame.client.ais.fsm.steeringbehaviors;
 import com.footballaigame.client.customdatatypes.Vector;
 import com.footballaigame.client.ais.fsm.entities.Player;
 
+/**
+ * Represents the behavior where player is going to the specified target and smoothly slow down
+ * as he approaches the target.
+ */
 public class Arrive extends SteeringBehavior {
     
+    /**
+     * The target.
+     */
     public Vector target;
     
+    /**
+     * Initializes a new instance of the {@link Arrive} class.
+     * @param player The player.
+     * @param priority The priority.
+     * @param weight The weight.
+     * @param target The target.
+     */
     public Arrive(Player player, int priority, double weight, Vector target) {
         super(player, priority, weight);
         this.target = target;
     }
     
+    /**
+     * Gets the current acceleration vector of the behavior.
+     * @return The acceleration {@link Vector}.
+     */
     @Override
     public Vector getAccelerationVector() {
         
