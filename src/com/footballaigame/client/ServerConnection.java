@@ -17,6 +17,21 @@ import java.util.List;
 public class ServerConnection {
     
     /**
+     * The name of the user that was used to log in.
+     */
+    public String userName;
+    
+    /**
+     * The name of the AI that was used to log in.
+     */
+    public String aiName;
+    
+    /**
+     * The user's access key that was used to log in.
+     */
+    public String accessKey;
+    
+    /**
      * The socket associated with the game server.
      */
     private Socket server;
@@ -42,6 +57,9 @@ public class ServerConnection {
     public static ServerConnection tryConnect(InetAddress address, int port, String userName, String aiName, String accessKey) {
         
         ServerConnection connection = new ServerConnection();
+        connection.userName = userName;
+        connection.aiName = aiName;
+        connection.accessKey = accessKey;
         
         try {
             
@@ -182,7 +200,7 @@ public class ServerConnection {
     }
     
     /**
-     * Sends the players parameters to the game server.
+     * Sends the players' parameters to the game server.
      *
      * @param players The players with their parameters set to be sent.
      * @throws IOException Thrown if an error has occurred while sending the players parameters.

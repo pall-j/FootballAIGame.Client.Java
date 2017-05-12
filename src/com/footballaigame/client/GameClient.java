@@ -50,6 +50,11 @@ public class GameClient {
     private ServerConnection connection;
     
     /**
+     * The value indicating whether the parametrized {@link GameClient#start(String, String)} was used.
+     */
+    private boolean wasParametrizedStartUsed;
+    
+    /**
      * Initializes a new instance of the {@link GameClient} class.
      *
      * @param serverAddress The game server address.
@@ -71,7 +76,7 @@ public class GameClient {
         
         while (true) {
             
-            System.out.println("Enter user name, AI name and access key separated by whitespace.");
+            System.out.println("Enter user name, AI name and access key separated by whitespaces.");
             
             String line = null;
             try {
@@ -84,7 +89,7 @@ public class GameClient {
             if (line == null)
                 break;
             
-            String[] tokens = line.trim().split(" ");
+            String[] tokens = line.trim().split("\\s+");
             
             if (tokens.length != 3) {
                 System.out.println("Invalid format!");
@@ -103,6 +108,8 @@ public class GameClient {
      */
     public void start(String userName, String accessKey) {
         
+        wasParametrizedStartUsed = true;
+        
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         
         while (true)
@@ -120,7 +127,7 @@ public class GameClient {
             if (line == null)
                 break;
             
-            String[] tokens = line.trim().split(" ");
+            String[] tokens = line.trim().split("\\s+");
             
             if (tokens.length != 1 || tokens[0].length() == 0) {
                 System.out.println("Invalid format!");
@@ -163,8 +170,11 @@ public class GameClient {
             } catch (IOException e) {
                 
                 System.out.println("Game Server has stopped responding.");
-                start();
                 
+                if (wasParametrizedStartUsed)
+                    start(connection.userName, connection.accessKey);
+                else
+                    start();
             }
         }
     }
