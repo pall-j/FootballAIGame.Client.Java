@@ -5,8 +5,8 @@ import com.footballaigame.client.ais.fsm.entities.Player;
 import com.footballaigame.client.ais.fsm.State;
 
 /**
- * Provides the base class from which the classes that represent team's states are derived.
- * Contains the shared functionality of the team's states.
+ * Provides the base class from which the classes that represent player's states are derived.
+ * Contains the shared functionality of the player's states.
  */
 public abstract class PlayerState extends State<Player> {
     

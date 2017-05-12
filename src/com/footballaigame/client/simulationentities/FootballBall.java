@@ -11,7 +11,7 @@ public class FootballBall extends MovableEntity {
     /**
      * The maximum allowed distance for kick to be successful.
      */
-    public static final double MAX_DISTANCE_FOR_KICK = 2; // [m]
+    public static final double MAX_DISTANCE_FOR_KICK = 2;
     
     /**
      * Returns the ball's deceleration in meters per simulation step squared.

@@ -17,17 +17,17 @@ public class GameClient {
     /**
      * The time in milliseconds of one simulation step.
      */
-    public static final int STEP_INTERVAL = 200; // [ms]
+    public static final int STEP_INTERVAL = 200;
     
     /**
-     * The football field height in meters.
+     * The football field height.
      */
-    public static final double FIELD_HEIGHT = 75; // [m]
+    public static final double FIELD_HEIGHT = 75;
     
     /**
-     * The football field width in meters.
+     * The football field width.
      */
-    public static final double FIELD_WIDTH = 110; // [m]
+    public static final double FIELD_WIDTH = 110;
     
     /**
      * Gets or sets the connection to the server.
@@ -146,7 +146,6 @@ public class GameClient {
         
         System.out.println("Connected.");
         startProcessing();
-        return;
     }
     
     /**
