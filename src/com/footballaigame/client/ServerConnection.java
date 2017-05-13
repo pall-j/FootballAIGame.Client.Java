@@ -64,7 +64,9 @@ public class ServerConnection {
         try {
             
             connection.server = new Socket();
+            connection.server.setTcpNoDelay(true); // disable Nagle's algorithm
             connection.server.connect(new InetSocketAddress(address, port), 5000);
+            
             connection.inputStream = connection.server.getInputStream();
             connection.outputStream = connection.server.getOutputStream();
             
@@ -189,7 +191,9 @@ public class ServerConnection {
         }
         
         ByteBuffer buffer = ByteBuffer.allocate(data.length * 4 + 4).order(ByteOrder.LITTLE_ENDIAN);
+        
         buffer.putInt(action.step);
+        
         for (float datum : data) {
             buffer.putFloat(datum);
         }
