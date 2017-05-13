@@ -140,8 +140,12 @@ public class ServerConnection {
         while (true) {
             Byte next = (byte) inputStream.read();
             
+            if (next == -1)
+                throw new IOException();
+            
             if (next == (byte) ('\n'))
                 break;
+            
             bytes.add(next);
         }
         
